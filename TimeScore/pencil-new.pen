@@ -1,0 +1,267 @@
+{
+  "version": "2.6",
+  "name": "TimeScoreMainView - Minimal",
+  "children": [
+    {
+      "type": "rectangle",
+      "id": "bg",
+      "x": -500,
+      "y": -1000,
+      "width": 1000,
+      "height": 2000,
+      "fill": "#FFFFFF"
+    },
+    {
+      "type": "ellipse",
+      "id": "progress-bg",
+      "x": -160,
+      "y": -320,
+      "width": 320,
+      "height": 320,
+      "fill": "transparent",
+      "stroke": "#808080",
+      "strokeWidth": 20,
+      "strokeOpacity": 0.2
+    },
+    {
+      "type": "ellipse",
+      "id": "progress-arc",
+      "x": -160,
+      "y": -320,
+      "width": 320,
+      "height": 320,
+      "fill": "transparent",
+      "stroke": "#000000",
+      "strokeWidth": 20,
+      "strokeDasharray": "754, 1005",  // 75% trim approximation
+      "strokeDashoffset": "251",      // Rotation -90 equiv
+      "rotation": -90
+    },
+    {
+      "type": "text",
+      "id": "score",
+      "x": -100,
+      "y": -100,
+      "width": 200,
+      "height": 80,
+      "text": "1250",
+      "fontFamily": "New York",
+      "fontWeight": "light",
+      "fontSize": 60,
+      "fill": "#000000",
+      "textAlign": "center"
+    },
+    {
+      "type": "text",
+      "id": "score-label",
+      "x": -100,
+      "y": -40,
+      "width": 200,
+      "height": 30,
+      "text": "今日分数",
+      "fontFamily": "New York",
+      "fontSize": 16,
+      "fill": "#808080",
+      "textAlign": "center"
+    },
+    {
+      "type": "rectangle",
+      "id": "input-bar",
+      "x": -180,
+      "y": 100,
+      "width": 360,
+      "height": 50,
+      "fill": "#000000",
+      "opacity": 0.9,
+      "cornerRadius": 16
+    },
+    {
+      "type": "text",
+      "id": "grade",
+      "x": -140,
+      "y": 110,
+      "width": 80,
+      "height": 30,
+      "text": "S",
+      "fontFamily": "New York",
+      "fontSize": 18,
+      "fill": "#FFFFFF",
+      "textAlign": "center"
+    },
+    {
+      "type": "rectangle",
+      "id": "sep1",
+      "x": -100,
+      "y": 100,
+      "width": 1,
+      "height": 50,
+      "fill": "#808080",
+      "opacity": 0.3
+    },
+    {
+      "type": "text",
+      "id": "behavior",
+      "x": 0,
+      "y": 110,
+      "width": 200,
+      "height": 30,
+      "text": "尚未选择具体行为",
+      "fontFamily": "New York",
+      "fontSize": 16,
+      "fill": "#FFFFFF",
+      "opacity": 0.8,
+      "textAlign": "center"
+    },
+    {
+      "type": "rectangle",
+      "id": "sep2",
+      "x": 100,
+      "y": 100,
+      "width": 1,
+      "height": 50,
+      "fill": "#808080",
+      "opacity": 0.3
+    },
+    {
+      "type": "icon",
+      "id": "play",
+      "iconSet": "SF Symbols",
+      "iconName": "play.circle.fill",
+      "x": 140,
+      "y": 110,
+      "size": 24,
+      "color": "#FFFFFF"
+    },
+    {
+      "type": "ellipse",
+      "id": "plus-btn",
+      "x": 100,
+      "y": -400,
+      "width": 44,
+      "height": 44,
+      "fill": "#FFFFFF",
+      "children": [
+        {
+          "type": "text",
+          "text": "+",
+          "fontSize": 28,
+          "fill": "#000000",
+          "textAlign": "center",
+          "verticalAlign": "center"
+        }
+      ]
+    },
+    {
+      "type": "ellipse",
+      "id": "pencil-btn",
+      "x": 160,
+      "y": -400,
+      "width": 44,
+      "height": 44,
+      "fill": "#FFFFFF",
+      "children": [
+        {
+          "type": "icon",
+          "iconSet": "SF Symbols",
+          "iconName": "pencil.circle.fill",
+          "color": "#000000",
+          "size": 24
+        }
+      ]
+    },
+    {
+      "type": "rectangle",
+      "id": "tab-bg",
+      "x": -196,
+      "y": 400,
+      "width": 393,
+      "height": 83,
+      "fill": "#FFFFFF"
+    },
+    {
+      "type": "rectangle",
+      "id": "tab-sep",
+      "x": -196,
+      "y": 400,
+      "width": 393,
+      "height": 1,
+      "fill": "#808080",
+      "opacity": 0.2
+    },
+    {
+      "type": "group",
+      "id": "home-tab",
+      "x": -146,
+      "y": 412,
+      "width": 80,
+      "height": 56,
+      "children": [
+        {
+          "type": "icon",
+          "iconSet": "SF Symbols",
+          "iconName": "house.fill",
+          "color": "#000000",
+          "size": 24
+        },
+        {
+          "type": "text",
+          "text": "首页",
+          "y": 36,
+          "fontSize": 12,
+          "fill": "#000000",
+          "textAlign": "center"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "id": "list-tab",
+      "x": -16,
+      "y": 412,
+      "width": 80,
+      "height": 56,
+      "children": [
+        {
+          "type": "icon",
+          "iconSet": "SF Symbols",
+          "iconName": "list.bullet",
+          "color": "#808080",
+          "size": 24
+        },
+        {
+          "type": "text",
+          "text": "记录",
+          "y": 36,
+          "fontSize": 12,
+          "fill": "#808080",
+          "textAlign": "center"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "id": "settings-tab",
+      "x": 114,
+      "y": 412,
+      "width": 80,
+      "height": 56,
+      "children": [
+        {
+          "type": "icon",
+          "iconSet": "SF Symbols",
+          "iconName": "gear",
+          "color": "#808080",
+          "size": 24
+        },
+        {
+          "type": "text",
+          "text": "设置",
+          "y": 36,
+          "fontSize": 12,
+          "fill": "#808080",
+          "textAlign": "center"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TimeScore Visualize: Insights</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1ded23",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102211",
+                        "recovery": "#3b82f6",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111811] dark:text-white transition-colors duration-300">
+<div class="relative flex min-h-screen w-full flex-col max-w-[480px] mx-auto bg-white dark:bg-[#0a0f0a] shadow-2xl overflow-x-hidden">
+<!-- TopAppBar -->
+<div class="sticky top-0 z-50 flex items-center bg-white/80 dark:bg-[#0a0f0a]/80 backdrop-blur-md p-4 pb-2 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="flex size-10 shrink-0 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 border-2 border-primary" data-alt="User profile avatar with green border" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDfvxjF5ZzCYwjiI6Qtm64F1LXEdtJULdQRvHWUCDDbLdqns5f1VGKbwd_UjHWtdzhSnQQjMGBuuofAM_42KgizvhCPPM60lF2PFHC3toYqXemIQyGC83OSjavfp0iGir4FlSd1piAHuqgtLI8Yr7kHhE7-fBKvVDDPftMrJAXzd1tZhhTdG_es9TdckvTPZHp524gYAsRM63DrfMQN0MZaw1C5rlZE0kT6BJEqxKtj07VBXtGXgHqfj_DAQtIn_5HewbWTfxPBwLQ");'>
+</div>
+</div>
+<h2 class="text-[#111811] dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center">Insights</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-full h-10 w-10 bg-transparent text-[#111811] dark:text-white">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</div>
+<!-- Dashboard Grid (Stats) -->
+<div class="px-4 pt-6">
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-1 rounded-2xl p-4 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 shadow-sm">
+<p class="text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">Total Points</p>
+<p class="text-[#111811] dark:text-white text-2xl font-bold">1,240</p>
+</div>
+<div class="flex flex-col gap-1 rounded-2xl p-4 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 shadow-sm">
+<p class="text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">Efficiency</p>
+<p class="text-primary text-2xl font-bold">92%</p>
+</div>
+<div class="flex flex-col gap-1 rounded-2xl p-4 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 shadow-sm">
+<p class="text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">Streak</p>
+<div class="flex items-center gap-2">
+<p class="text-[#111811] dark:text-white text-2xl font-bold">12</p>
+<span class="material-symbols-outlined text-orange-500 text-xl">local_fire_department</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 rounded-2xl p-4 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 shadow-sm">
+<p class="text-zinc-500 dark:text-zinc-400 text-xs font-medium uppercase tracking-wider">Avg Mood</p>
+<p class="text-[#111811] dark:text-white text-2xl font-bold">8.5</p>
+</div>
+</div>
+</div>
+<!-- Recent Behavior Nodes (Timeline) -->
+<div class="mt-8">
+<h3 class="text-[#111811] dark:text-white text-lg font-bold px-4 mb-4">Behavior Nodes</h3>
+<div class="grid grid-cols-[48px_1fr] gap-x-2 px-4">
+<!-- Node 1: Productive -->
+<div class="flex flex-col items-center gap-0">
+<div class="z-10 bg-primary/20 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px] font-bold">bolt</span>
+</div>
+<div class="w-1 bg-primary/30 h-16 rounded-full -mt-1 -mb-1"></div>
+</div>
+<div class="flex flex-1 flex-col py-2">
+<p class="text-[#111811] dark:text-white text-base font-semibold">Deep Work Session</p>
+<p class="text-zinc-500 text-sm">10:00 AM - 12:00 PM • Focus</p>
+</div>
+<!-- Node 2: Recovery -->
+<div class="flex flex-col items-center gap-0">
+<div class="z-10 bg-recovery/20 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-recovery text-[20px] font-bold">self_improvement</span>
+</div>
+<div class="w-1 bg-recovery/30 h-12 rounded-full -mt-1 -mb-1"></div>
+</div>
+<div class="flex flex-1 flex-col py-2">
+<p class="text-[#111811] dark:text-white text-base font-semibold">Short Recovery</p>
+<p class="text-zinc-500 text-sm">12:00 PM - 12:30 PM • Rest</p>
+</div>
+<!-- Node 3: Productive -->
+<div class="flex flex-col items-center gap-0">
+<div class="z-10 bg-primary/20 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px] font-bold">terminal</span>
+</div>
+<div class="w-1 bg-primary/30 h-16 rounded-full -mt-1 -mb-1"></div>
+</div>
+<div class="flex flex-1 flex-col py-2">
+<p class="text-[#111811] dark:text-white text-base font-semibold">Active Coding</p>
+<p class="text-zinc-500 text-sm">12:30 PM - 03:00 PM • Build</p>
+</div>
+</div>
+</div>
+<!-- Weekly Performance (Swift Charts Style) -->
+<div class="mt-8 px-4">
+<h3 class="text-[#111811] dark:text-white text-lg font-bold mb-4">Weekly Performance</h3>
+<div class="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 h-48 flex items-end justify-between gap-2 shadow-sm">
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/20 rounded-full h-16 relative">
+<div class="absolute bottom-0 w-full bg-primary rounded-full h-1/2"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400 uppercase">Mon</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/20 rounded-full h-24 relative">
+<div class="absolute bottom-0 w-full bg-primary rounded-full h-3/4"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400 uppercase">Tue</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/20 rounded-full h-32 relative">
+<div class="absolute bottom-0 w-full bg-primary rounded-full h-[90%]"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400 uppercase">Wed</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/20 rounded-full h-20 relative">
+<div class="absolute bottom-0 w-full bg-primary rounded-full h-2/3"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400 uppercase">Thu</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/20 rounded-full h-28 relative">
+<div class="absolute bottom-0 w-full bg-primary rounded-full h-full"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400 uppercase">Fri</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/20 rounded-full h-12 relative">
+<div class="absolute bottom-0 w-full bg-primary rounded-full h-1/4"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400 uppercase">Sat</span>
+</div>
+<div class="flex flex-col items-center gap-2 flex-1">
+<div class="w-full bg-primary/20 rounded-full h-10 relative">
+<div class="absolute bottom-0 w-full bg-primary rounded-full h-1/5"></div>
+</div>
+<span class="text-[10px] font-bold text-zinc-400 uppercase">Sun</span>
+</div>
+</div>
+</div>
+<!-- Activity Heatmap -->
+<div class="mt-8 px-4 pb-20">
+<h3 class="text-[#111811] dark:text-white text-lg font-bold mb-4">Consistency</h3>
+<div class="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-5 shadow-sm">
+<div class="grid grid-cols-7 gap-1">
+<!-- Placeholder days for a month -->
+<div class="aspect-square bg-primary rounded-md opacity-20"></div>
+<div class="aspect-square bg-primary rounded-md opacity-40"></div>
+<div class="aspect-square bg-primary rounded-md opacity-100"></div>
+<div class="aspect-square bg-primary rounded-md opacity-60"></div>
+<div class="aspect-square bg-primary rounded-md opacity-10"></div>
+<div class="aspect-square bg-primary rounded-md opacity-80"></div>
+<div class="aspect-square bg-primary rounded-md opacity-30"></div>
+<div class="aspect-square bg-primary rounded-md opacity-90"></div>
+<div class="aspect-square bg-primary rounded-md opacity-20"></div>
+<div class="aspect-square bg-primary rounded-md opacity-50"></div>
+<div class="aspect-square bg-primary rounded-md opacity-100"></div>
+<div class="aspect-square bg-primary rounded-md opacity-70"></div>
+<div class="aspect-square bg-primary rounded-md opacity-40"></div>
+<div class="aspect-square bg-primary rounded-md opacity-10"></div>
+<div class="aspect-square bg-primary rounded-md opacity-60"></div>
+<div class="aspect-square bg-primary rounded-md opacity-100"></div>
+<div class="aspect-square bg-primary rounded-md opacity-80"></div>
+<div class="aspect-square bg-primary rounded-md opacity-20"></div>
+<div class="aspect-square bg-primary rounded-md opacity-40"></div>
+<div class="aspect-square bg-primary rounded-md opacity-90"></div>
+<div class="aspect-square bg-primary rounded-md opacity-50"></div>
+<div class="aspect-square bg-primary rounded-md opacity-100"></div>
+<div class="aspect-square bg-primary rounded-md opacity-70"></div>
+<div class="aspect-square bg-primary rounded-md opacity-30"></div>
+<div class="aspect-square bg-primary rounded-md opacity-10"></div>
+<div class="aspect-square bg-primary rounded-md opacity-90"></div>
+<div class="aspect-square bg-primary rounded-md opacity-100"></div>
+<div class="aspect-square bg-primary rounded-md opacity-60"></div>
+<div class="aspect-square bg-primary rounded-md opacity-40"></div>
+<div class="aspect-square bg-primary rounded-md opacity-10"></div>
+<div class="aspect-square bg-zinc-100 dark:bg-zinc-800 rounded-md"></div>
+<div class="aspect-square bg-zinc-100 dark:bg-zinc-800 rounded-md"></div>
+<div class="aspect-square bg-zinc-100 dark:bg-zinc-800 rounded-md"></div>
+<div class="aspect-square bg-zinc-100 dark:bg-zinc-800 rounded-md"></div>
+<div class="aspect-square bg-zinc-100 dark:bg-zinc-800 rounded-md"></div>
+</div>
+<div class="flex justify-between mt-3 text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
+<span>Less</span>
+<div class="flex gap-1">
+<div class="w-2 h-2 rounded-sm bg-primary opacity-10"></div>
+<div class="w-2 h-2 rounded-sm bg-primary opacity-40"></div>
+<div class="w-2 h-2 rounded-sm bg-primary opacity-70"></div>
+<div class="w-2 h-2 rounded-sm bg-primary opacity-100"></div>
+</div>
+<span>More</span>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Spacer -->
+<div class="h-20"></div>
+<!-- Floating Quick Add Button -->
+<button class="fixed bottom-6 right-6 size-14 bg-primary text-background-dark rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined font-bold text-3xl">add</span>
+</button>
+</div>
+</body></html>

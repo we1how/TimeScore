@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Achievement Success Overlay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1ded23",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#0a0f0a",
+                        "accent-gold": "#FFD700",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .blur-overlay {
+            backdrop-filter: blur(20px);
+            background-color: rgba(16, 34, 17, 0.85);
+        }
+        .geometric-particle {
+            position: absolute;
+            opacity: 0.6;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white overflow-hidden">
+<!-- Main Full-Screen Overlay Container -->
+<div class="relative flex min-h-screen w-full flex-col blur-overlay items-center justify-between p-6">
+<!-- Header / Close (Optional for Overlay) -->
+<div class="w-full flex justify-end pt-4">
+<div class="size-10 flex items-center justify-center rounded-full bg-white/10 text-white/60">
+<span class="material-symbols-outlined">close</span>
+</div>
+</div>
+<!-- Achievement Content Area -->
+<div class="relative flex flex-col items-center justify-center w-full max-w-md">
+<!-- Geometric Particles (Background) -->
+<div class="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
+<!-- Burst Pattern -->
+<div class="geometric-particle size-4 rounded-full bg-primary -translate-x-24 -translate-y-24"></div>
+<div class="geometric-particle size-3 bg-accent-gold rotate-45 translate-x-32 -translate-y-12"></div>
+<div class="geometric-particle size-5 rounded-full bg-primary/40 -translate-x-16 translate-y-32"></div>
+<div class="geometric-particle size-2 bg-white translate-x-24 translate-y-20"></div>
+<div class="geometric-particle size-4 bg-primary/20 rotate-12 -translate-x-36 translate-y-4"></div>
+<div class="geometric-particle size-3 rounded-full bg-accent-gold/50 translate-x-12 -translate-y-40"></div>
+</div>
+<!-- Vibrant Checkmark Icon -->
+<div class="relative mb-8">
+<div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full"></div>
+<div class="relative flex h-32 w-32 items-center justify-center rounded-full bg-primary text-background-dark shadow-[0_0_40px_rgba(29,237,35,0.4)]">
+<span class="material-symbols-outlined !text-6xl">check_circle</span>
+</div>
+</div>
+<!-- Headline Text (Points) -->
+<div class="text-center space-y-2">
+<h2 class="text-primary text-sm font-bold tracking-widest uppercase">Achievement Unlocked</h2>
+<h1 class="text-white tracking-tight text-6xl font-extrabold leading-tight">+231 Points</h1>
+<p class="text-white/60 text-lg font-medium">Productivity Sprint Completed</p>
+</div>
+<!-- Progress Bar Section -->
+<div class="w-full mt-12 bg-white/5 rounded-2xl p-6 border border-white/10">
+<div class="flex flex-col gap-3">
+<div class="flex gap-6 justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">bolt</span>
+<p class="text-white text-base font-semibold leading-normal">Energy Level</p>
+</div>
+<p class="text-white text-sm font-mono leading-normal">750/1000</p>
+</div>
+<div class="rounded-full bg-white/10 h-3 overflow-hidden">
+<div class="h-full rounded-full bg-primary shadow-[0_0_12px_rgba(29,237,35,0.6)]" style="width: 75%;"></div>
+</div>
+<p class="text-white/40 text-xs text-center font-normal leading-normal">Almost at full charge! +15% boost from last session.</p>
+</div>
+</div>
+</div>
+<!-- Action Button Section -->
+<div class="w-full max-w-md pb-8">
+<div class="flex px-4 py-3">
+<button class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-16 px-5 bg-primary text-background-dark text-lg font-extrabold leading-normal tracking-[0.015em] hover:scale-[1.02] active:scale-95 transition-all">
+<span class="truncate">Continue</span>
+</button>
+</div>
+<p class="text-white/30 text-center text-[10px] uppercase tracking-widest">TimeScore v2.4 Modular System</p>
+</div>
+</div>
+<!-- Hidden Header Image Reference for component list compliance -->
+<div class="hidden">
+<div data-alt="Abstract dark green geometric pattern with glowing accents"></div>
+</div>
+</body></html>

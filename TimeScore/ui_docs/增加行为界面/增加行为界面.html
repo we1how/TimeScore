@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create New Behavior</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "ios-bg": "#FFFFFF",
+                        "ios-gray": "#F2F2F7",
+                        "ios-text-gray": "#8E8E93",
+                        "ios-border": "#E5E5EA",
+                        "vibrant-green": "#00E600",
+                        "ios-dark-gray": "#3A3A3C",
+                    },
+                    fontFamily: {
+                        "sans": ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-zinc-100 text-ios-dark-gray antialiased;
+                font-family: 'Inter', -apple-system, sans-serif;
+            }
+        }
+        .segmented-control-item:checked + label {
+            @apply bg-vibrant-green text-black font-semibold shadow-sm;
+        }
+        .ios-input-underline {
+            @apply bg-transparent border-t-0 border-l-0 border-r-0 border-b border-zinc-200 focus:border-vibrant-green focus:ring-0 transition-all duration-200;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex items-center justify-center min-h-screen">
+<div class="relative w-full max-w-[430px] h-[932px] bg-white flex flex-col overflow-hidden border-[8px] border-zinc-200 rounded-[3rem] shadow-2xl">
+<div class="flex justify-between items-center px-8 pt-12 pb-4 text-ios-dark-gray">
+<div class="text-[15px] font-semibold">9:41</div>
+<div class="flex gap-1.5 items-center">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px]">battery_full</span>
+</div>
+</div>
+<nav class="flex justify-between items-center px-6 py-4 border-b border-zinc-50">
+<button class="text-ios-dark-gray text-[17px] font-normal hover:opacity-60 transition-opacity">Cancel</button>
+<h1 class="text-[17px] font-semibold text-ios-dark-gray">New Behavior</h1>
+<button class="text-vibrant-green text-[17px] font-semibold hover:opacity-60 transition-opacity">Done</button>
+</nav>
+<div class="flex-1 px-8 pt-8 space-y-10">
+<section class="space-y-2">
+<label class="block text-[13px] font-semibold text-ios-text-gray uppercase tracking-wider px-1">Behavior Name</label>
+<input class="w-full ios-input-underline px-1 py-3 text-xl text-ios-dark-gray placeholder:text-zinc-300" placeholder="e.g., Deep Work" type="text"/>
+</section>
+<section class="space-y-4">
+<label class="block text-[13px] font-semibold text-ios-text-gray uppercase tracking-wider px-1">Behavior Grade</label>
+<div class="bg-ios-gray p-1 rounded-full flex gap-1">
+<div class="flex-1">
+<input class="hidden segmented-control-item" id="grade-s" name="grade" type="radio" value="S"/>
+<label class="block text-center py-2.5 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 text-ios-text-gray" for="grade-s">S</label>
+</div>
+<div class="flex-1">
+<input checked="" class="hidden segmented-control-item" id="grade-a" name="grade" type="radio" value="A"/>
+<label class="block text-center py-2.5 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 text-ios-text-gray" for="grade-a">A</label>
+</div>
+<div class="flex-1">
+<input class="hidden segmented-control-item" id="grade-b" name="grade" type="radio" value="B"/>
+<label class="block text-center py-2.5 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 text-ios-text-gray" for="grade-b">B</label>
+</div>
+<div class="flex-1">
+<input class="hidden segmented-control-item" id="grade-c" name="grade" type="radio" value="C"/>
+<label class="block text-center py-2.5 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 text-ios-text-gray" for="grade-c">C</label>
+</div>
+<div class="flex-1">
+<input class="hidden segmented-control-item" id="grade-d" name="grade" type="radio" value="D"/>
+<label class="block text-center py-2.5 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 text-ios-text-gray" for="grade-d">D</label>
+</div>
+<div class="flex-1">
+<input class="hidden segmented-control-item" id="grade-r" name="grade" type="radio" value="R"/>
+<label class="block text-center py-2.5 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 text-ios-text-gray" for="grade-r">R</label>
+</div>
+</div>
+<p class="text-[12px] text-ios-text-gray px-1 leading-relaxed italic">
+                    Grades determine the TimeScore multiplier for your productivity tracking.
+                </p>
+</section>
+<section class="space-y-3">
+<label class="block text-[13px] font-semibold text-ios-text-gray uppercase tracking-wider px-1">Description</label>
+<textarea class="w-full bg-white border border-ios-border rounded-2xl p-4 text-[16px] text-ios-dark-gray focus:border-vibrant-green focus:ring-0 transition-all duration-200 placeholder:text-zinc-300 resize-none" placeholder="Short tagline for this behavior..." rows="4"></textarea>
+</section>
+</div>
+<div class="flex justify-center pb-3">
+<div class="w-32 h-1.5 bg-zinc-200 rounded-full"></div>
+</div>
+</div>
+
+</body></html>

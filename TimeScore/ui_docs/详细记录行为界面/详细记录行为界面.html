@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TimeScore Home: Behavior Duration and Time</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1ded23",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102211",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+            .filled-icon {
+                font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+            .behavior-group { display: none; }
+            #grade-s:checked ~ #behaviors-s,
+            #grade-a:checked ~ #behaviors-a,
+            #grade-b:checked ~ #behaviors-b,
+            #grade-c:checked ~ #behaviors-c,
+            #grade-d:checked ~ #behaviors-d,
+            #grade-r:checked ~ #behaviors-r {
+                display: flex;
+            }
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111811] dark:text-white min-h-screen">
+<div class="relative mx-auto max-w-[430px] min-h-screen bg-white dark:bg-[#0c140c] flex flex-col overflow-hidden shadow-2xl">
+<div class="flex items-center px-6 pt-8 pb-4 justify-between bg-white dark:bg-[#0c140c]">
+<div class="text-[#111811] dark:text-white">
+<span class="material-symbols-outlined text-2xl">settings</span>
+</div>
+<h2 class="text-[#111811] dark:text-white text-lg font-bold leading-tight tracking-tight">TimeScore</h2>
+<div class="flex items-center">
+<button class="flex h-10 w-10 items-center justify-center rounded-full bg-background-light dark:bg-white/10 text-[#111811] dark:text-white">
+<span class="material-symbols-outlined text-2xl">calendar_today</span>
+</button>
+</div>
+</div>
+<div class="px-6 py-4 flex items-center justify-between gap-4">
+<div class="flex-1 bg-[#f0f4f0] dark:bg-white/5 rounded-xl p-6">
+<p class="text-[#618963] dark:text-primary/70 text-sm font-semibold uppercase tracking-wider">Total Points</p>
+<p class="text-[#111811] dark:text-white text-5xl font-bold tracking-tighter mt-1">1,250</p>
+</div>
+<div class="relative flex items-center justify-center size-28 shrink-0">
+<svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+<circle class="stroke-[#dbe6dc] dark:stroke-white/10" cx="18" cy="18" fill="none" r="16" stroke-width="3"></circle>
+<circle class="stroke-primary" cx="18" cy="18" fill="none" r="16" stroke-dasharray="100" stroke-dashoffset="15" stroke-linecap="round" stroke-width="3"></circle>
+</svg>
+<div class="absolute flex flex-col items-center justify-center">
+<span class="text-xl font-bold dark:text-white leading-none">85%</span>
+<span class="text-[10px] text-[#618963] font-medium">Energy</span>
+</div>
+</div>
+</div>
+<div class="px-6 pt-4 pb-1">
+<h3 class="text-[#111811] dark:text-white text-xl font-bold">Record Behavior</h3>
+</div>
+<div class="mx-6 p-5 rounded-2xl bg-[#F5F5F5] dark:bg-white/5 flex flex-col gap-4 mb-32 border border-[#E5E5E5] dark:border-white/5">
+<div class="flex flex-col gap-2">
+<label class="text-[#618963] dark:text-white/60 text-xs font-semibold uppercase tracking-wider">Efficiency Grade</label>
+<div class="flex h-11 items-center justify-between rounded-full bg-white dark:bg-white/10 p-1 shadow-sm border border-[#E5E5E5] dark:border-white/5">
+<input class="hidden peer/s" id="grade-s" name="grade" type="radio" value="S"/>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-1 peer-checked/s:bg-primary peer-checked/s:text-[#111811] text-[#618963] dark:text-white/70 text-sm font-bold transition-all" for="grade-s">S</label>
+<input checked="" class="hidden peer/a" id="grade-a" name="grade" type="radio" value="A"/>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-1 peer-checked/a:bg-primary peer-checked/a:text-[#111811] text-[#618963] dark:text-white/70 text-sm font-bold transition-all" for="grade-a">A</label>
+<input class="hidden peer/b" id="grade-b" name="grade" type="radio" value="B"/>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-1 peer-checked/b:bg-primary peer-checked/b:text-[#111811] text-[#618963] dark:text-white/70 text-sm font-bold transition-all" for="grade-b">B</label>
+<input class="hidden peer/c" id="grade-c" name="grade" type="radio" value="C"/>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-1 peer-checked/c:bg-primary peer-checked/c:text-[#111811] text-[#618963] dark:text-white/70 text-sm font-bold transition-all" for="grade-c">C</label>
+<input class="hidden peer/d" id="grade-d" name="grade" type="radio" value="D"/>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-1 peer-checked/d:bg-primary peer-checked/d:text-[#111811] text-[#618963] dark:text-white/70 text-sm font-bold transition-all" for="grade-d">D</label>
+<input class="hidden peer/r" id="grade-r" name="grade" type="radio" value="R"/>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-1 peer-checked/r:bg-primary peer-checked/r:text-[#111811] text-[#618963] dark:text-white/70 text-sm font-bold transition-all" for="grade-r">R</label>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[#618963] dark:text-white/60 text-xs font-semibold uppercase tracking-wider">Specific Behavior</label>
+<div class="relative group cursor-pointer bg-white dark:bg-white/10 rounded-xl px-4 py-3 shadow-sm border border-[#E5E5E5] dark:border-white/10 flex items-center justify-between">
+<span class="text-[#618963]/50 dark:text-white/30 text-sm">Select behavior...</span>
+<span class="material-symbols-outlined text-sm text-[#618963] dark:text-white/50">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[#618963] dark:text-white/60 text-xs font-semibold uppercase tracking-wider">Time &amp; Duration</label>
+<div class="flex items-center gap-2">
+<div class="flex-1 flex items-center justify-between bg-white dark:bg-white/10 rounded-full p-1.5 pr-4 shadow-sm border border-[#E5E5E5] dark:border-white/10">
+<div class="flex gap-1.5">
+<button class="size-8 flex items-center justify-center rounded-full bg-background-light dark:bg-white/10 text-[#111811] dark:text-white">
+<span class="material-symbols-outlined text-lg leading-none">remove</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded-full bg-background-light dark:bg-white/10 text-[#111811] dark:text-white">
+<span class="material-symbols-outlined text-lg leading-none">add</span>
+</button>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-lg font-bold">30</span>
+<span class="text-[10px] font-medium text-[#618963] uppercase">min</span>
+</div>
+</div>
+<div class="w-24 flex items-center justify-center bg-white dark:bg-white/10 rounded-full h-[46px] shadow-sm border border-[#E5E5E5] dark:border-white/10">
+<input class="w-full bg-transparent border-none text-center focus:ring-0 text-lg font-bold p-0 text-[#111811] dark:text-white placeholder-[#111811]/30 dark:placeholder-white/30" type="text" value="14:30"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[#618963] dark:text-white/60 text-xs font-semibold uppercase tracking-wider">Mood</label>
+<div class="flex items-center gap-5 bg-white dark:bg-white/10 rounded-full px-6 py-2.5 shadow-sm border border-[#E5E5E5] dark:border-white/10 justify-center">
+<span class="material-symbols-outlined filled-icon text-primary text-xl">star</span>
+<span class="material-symbols-outlined filled-icon text-primary text-xl">star</span>
+<span class="material-symbols-outlined filled-icon text-primary text-xl">star</span>
+<span class="material-symbols-outlined filled-icon text-primary text-xl">star</span>
+<span class="material-symbols-outlined text-[#dbe6dc] dark:text-white/20 text-xl">star</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[#618963] dark:text-white/60 text-xs font-semibold uppercase tracking-wider">Notes</label>
+<div class="bg-white dark:bg-white/10 rounded-xl px-4 py-3 shadow-sm border border-[#E5E5E5] dark:border-white/10">
+<input class="w-full bg-transparent border-none p-0 focus:ring-0 text-[#111811] dark:text-white placeholder-[#618963]/50 dark:placeholder-white/30 text-sm" placeholder="What did you accomplish?" type="text"/>
+</div>
+</div>
+</div>
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-6 bg-gradient-to-t from-white via-white/90 to-transparent dark:from-[#0c140c] dark:via-[#0c140c]/90">
+<button class="w-full h-14 rounded-full bg-gradient-to-r from-primary to-[#16cc1c] text-[#0c140c] text-lg font-bold shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform">
+            Record Behavior
+        </button>
+</div>
+</div>
+
+</body></html>
