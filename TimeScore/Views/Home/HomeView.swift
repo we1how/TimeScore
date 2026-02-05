@@ -153,21 +153,33 @@ struct HomeView: View {
     // MARK: - Grade Selector
 
     private var gradeSelector: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 12) {
             HStack(spacing: 12) {
                 ForEach(["S", "A", "B", "C", "D", "R"], id: \.self) { grade in
                     gradeButton(grade)
                 }
             }
 
-            // Performance Grade 标签
-            Text("Performance Grade")
-                .font(.system(size: 10, weight: .medium))
-                .tracking(2)
+            // 等级描述
+            Text(currentGradeDescription)
+                .font(.system(size: 13, weight: .medium))
                 .foregroundColor(.gray)
-                .textCase(.uppercase)
-                .padding(.top, 4)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 20)
+                .animation(.easeInOut(duration: 0.2), value: behaviorVM.grade)
         }
+    }
+
+    // 当前等级描述
+    private var currentGradeDescription: String {
+        let grade = behaviorVM.grade
+        if grade.hasPrefix("S") { return "深度工作 · 高价值产出" }
+        if grade.hasPrefix("A") { return "高效产出 · 专注执行" }
+        if grade.hasPrefix("B") { return "日常事务 · 维持运转" }
+        if grade.hasPrefix("C") { return "低效行为 · 时间浪费" }
+        if grade.hasPrefix("D") { return "消极行为 · 损害成长" }
+        if grade.hasPrefix("R") { return "恢复精力 · 充电休息" }
+        return "选择等级开始计时"
     }
 
     private func gradeButton(_ grade: String) -> some View {
@@ -187,7 +199,7 @@ struct HomeView: View {
                 // 自动选择该等级的第一个推荐行为
                 let recommendedBehaviors = behaviorVM.recommendedBehaviors()
                 if let firstBehavior = recommendedBehaviors.first {
-                    behaviorVM.selectBehavior(firstBehavior)
+                    behaviorVM.selectBehavior(firstBehavior.name)
                 }
             }
         }) {
@@ -235,7 +247,7 @@ struct HomeView: View {
             }) {
                 ZStack {
                     Circle()
-                        .fill(canStartTimer ? Color.vibrantGreen : Color.gray.opacity(0.3))
+                        .fill(Color.vibrantGreen)
                         .frame(width: 80, height: 80)
                         .shadow(color: canStartTimer ? Color.vibrantGreen.opacity(0.4) : Color.clear, radius: 12, x: 0, y: 6)
 
@@ -246,7 +258,7 @@ struct HomeView: View {
                 }
             }
             .disabled(!canStartTimer)
-            .opacity(canStartTimer ? 1.0 : 0.5)
+//            .opacity(canStartTimer ? 1.0 : 0.5)
 
             // 停止并保存按钮（仅在暂停时显示）
             if !isRunning && elapsedTime > 0 {
@@ -277,7 +289,7 @@ struct HomeView: View {
     // 是否可以开始计时（已选择有效行为）
     private var canStartTimer: Bool {
         !behaviorVM.behaviorName.isEmpty &&
-        behaviorVM.recommendedBehaviors().contains(behaviorVM.behaviorName)
+        behaviorVM.recommendedBehaviors().contains(where: { $0.name == behaviorVM.behaviorName })
     }
 
     // 格式化时间显示
@@ -355,8 +367,9 @@ struct HomeView: View {
             // 水平滚动的行为标签
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
-                    ForEach(behaviorVM.recommendedBehaviors(), id: \.self) { behavior in
-                        behaviorPill(behavior)
+                    let behaviors = behaviorVM.recommendedBehaviors()
+                    ForEach(0..<behaviors.count, id: \.self) { index in
+                        behaviorPill(behaviors[index])
                     }
                 }
                 .padding(.horizontal, 20)
@@ -377,8 +390,8 @@ struct HomeView: View {
         return "推荐行为"
     }
 
-    private func behaviorPill(_ name: String) -> some View {
-        let isSelected = behaviorVM.behaviorName == name
+    private func behaviorPill(_ behavior: (name: String, desc: String)) -> some View {
+        let isSelected = behaviorVM.behaviorName == behavior.name
 
         return Button(action: {
             withAnimation(.easeOut(duration: 0.2)) {
@@ -386,7 +399,7 @@ struct HomeView: View {
                 if isRunning {
                     pauseTimer()
                 }
-                behaviorVM.selectBehavior(name)
+                behaviorVM.selectBehavior(behavior.name)
             }
         }) {
             HStack(spacing: 6) {
@@ -394,7 +407,7 @@ struct HomeView: View {
                     Image(systemName: "checkmark")
                         .font(.system(size: 12, weight: .semibold))
                 }
-                Text(name)
+                Text(behavior.name)
                     .font(.system(size: 14, weight: isSelected ? .semibold : .medium))
             }
             .foregroundColor(isSelected ? .white : .black.opacity(0.7))

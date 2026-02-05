@@ -183,6 +183,38 @@ class CoreDataStack {
 
         wishEntity.properties = [wishId, wishName, wishCost, wishStatus, wishCreatedAt, wishRedeemedAt, wishProgress]
 
+        // MARK: CustomBehavior Entity (用户自定义行为模板)
+        let customBehaviorEntity = NSEntityDescription()
+        customBehaviorEntity.name = "CustomBehavior"
+        customBehaviorEntity.managedObjectClassName = "CustomBehavior"
+
+        let customBehaviorId = NSAttributeDescription()
+        customBehaviorId.name = "id"
+        customBehaviorId.attributeType = .UUIDAttributeType
+        customBehaviorId.isOptional = false
+
+        let customBehaviorName = NSAttributeDescription()
+        customBehaviorName.name = "name"
+        customBehaviorName.attributeType = .stringAttributeType
+        customBehaviorName.isOptional = false
+
+        let customBehaviorDesc = NSAttributeDescription()
+        customBehaviorDesc.name = "behaviorDescription"
+        customBehaviorDesc.attributeType = .stringAttributeType
+        customBehaviorDesc.isOptional = true
+
+        let customBehaviorGrade = NSAttributeDescription()
+        customBehaviorGrade.name = "grade"
+        customBehaviorGrade.attributeType = .stringAttributeType
+        customBehaviorGrade.isOptional = false
+
+        let customBehaviorCreatedAt = NSAttributeDescription()
+        customBehaviorCreatedAt.name = "createdAt"
+        customBehaviorCreatedAt.attributeType = .dateAttributeType
+        customBehaviorCreatedAt.isOptional = false
+
+        customBehaviorEntity.properties = [customBehaviorId, customBehaviorName, customBehaviorDesc, customBehaviorGrade, customBehaviorCreatedAt]
+
         // MARK: Relationships
 
         // User -> Behaviors (To-Many)
@@ -200,6 +232,14 @@ class CoreDataStack {
         userToWishes.minCount = 0
         userToWishes.maxCount = 0
         userToWishes.deleteRule = .cascadeDeleteRule
+
+        // User -> CustomBehaviors (To-Many)
+        let userToCustomBehaviors = NSRelationshipDescription()
+        userToCustomBehaviors.name = "customBehaviors"
+        userToCustomBehaviors.destinationEntity = customBehaviorEntity
+        userToCustomBehaviors.minCount = 0
+        userToCustomBehaviors.maxCount = 0
+        userToCustomBehaviors.deleteRule = .cascadeDeleteRule
 
         // Behavior -> User (To-One)
         let behaviorToUser = NSRelationshipDescription()
@@ -219,17 +259,28 @@ class CoreDataStack {
         wishToUser.deleteRule = .nullifyDeleteRule
         wishToUser.inverseRelationship = userToWishes
 
+        // CustomBehavior -> User (To-One)
+        let customBehaviorToUser = NSRelationshipDescription()
+        customBehaviorToUser.name = "user"
+        customBehaviorToUser.destinationEntity = userEntity
+        customBehaviorToUser.minCount = 1
+        customBehaviorToUser.maxCount = 1
+        customBehaviorToUser.deleteRule = .nullifyDeleteRule
+        customBehaviorToUser.inverseRelationship = userToCustomBehaviors
+
         // Set inverse relationships
         userToBehaviors.inverseRelationship = behaviorToUser
         userToWishes.inverseRelationship = wishToUser
+        userToCustomBehaviors.inverseRelationship = customBehaviorToUser
 
         // Add relationships to entities
-        userEntity.properties += [userToBehaviors, userToWishes]
+        userEntity.properties += [userToBehaviors, userToWishes, userToCustomBehaviors]
         behaviorEntity.properties += [behaviorToUser]
         wishEntity.properties += [wishToUser]
+        customBehaviorEntity.properties += [customBehaviorToUser]
 
         // Set entities in model
-        model.entities = [userEntity, behaviorEntity, wishEntity]
+        model.entities = [userEntity, behaviorEntity, wishEntity, customBehaviorEntity]
 
         return model
     }
@@ -286,6 +337,14 @@ public class User: NSManagedObject {
         let set = wishes as? Set<Wish> ?? []
         return set.sorted { $0.createdAt > $1.createdAt }
     }
+
+    @NSManaged public var customBehaviors: NSSet?
+
+    /// 便捷访问 customBehaviors 数组
+    public var customBehaviorsArray: [CustomBehavior] {
+        let set = customBehaviors as? Set<CustomBehavior> ?? []
+        return set.sorted { $0.createdAt > $1.createdAt }
+    }
 }
 
 /// 行为记录实体
@@ -321,4 +380,16 @@ public class Wish: NSManagedObject {
     public var isRedeemable: Bool {
         return status == "pending" && progress >= 1.0
     }
+}
+
+/// 自定义行为模板实体
+/// 存储用户创建的自定义行为
+@objc(CustomBehavior)
+public class CustomBehavior: NSManagedObject {
+    @NSManaged public var id: UUID
+    @NSManaged public var name: String
+    @NSManaged public var behaviorDescription: String?
+    @NSManaged public var grade: String
+    @NSManaged public var createdAt: Date
+    @NSManaged public var user: User
 }

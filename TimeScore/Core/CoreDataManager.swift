@@ -162,6 +162,71 @@ class CoreDataManager: ObservableObject {
         saveContext()
     }
 
+    // MARK: - Custom Behavior Operations
+
+    /// 添加自定义行为模板
+    @discardableResult
+    func addCustomBehavior(to user: User, name: String, description: String?, grade: String) -> CustomBehavior {
+        let customBehavior = CustomBehavior(context: context)
+        customBehavior.id = UUID()
+        customBehavior.name = name
+        customBehavior.behaviorDescription = description
+        customBehavior.grade = grade
+        customBehavior.createdAt = Date()
+        customBehavior.user = user
+
+        saveContext()
+        return customBehavior
+    }
+
+    /// 获取用户的所有自定义行为
+    func fetchCustomBehaviors(for user: User) -> [CustomBehavior] {
+        let request: NSFetchRequest<CustomBehavior> = CustomBehavior.fetchRequest()
+        request.predicate = NSPredicate(format: "user == %@", user)
+        request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
+
+        do {
+            return try context.fetch(request)
+        } catch {
+            print("获取自定义行为失败: \(error)")
+            return []
+        }
+    }
+
+    /// 按等级获取自定义行为
+    func fetchCustomBehaviors(for user: User, grade: String) -> [CustomBehavior] {
+        let request: NSFetchRequest<CustomBehavior> = CustomBehavior.fetchRequest()
+        request.predicate = NSPredicate(format: "user == %@ AND grade == %@", user, grade)
+        request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
+
+        do {
+            return try context.fetch(request)
+        } catch {
+            print("获取自定义行为失败: \(error)")
+            return []
+        }
+    }
+
+    /// 更新自定义行为
+    func updateCustomBehavior(_ customBehavior: CustomBehavior, name: String? = nil, description: String? = nil, grade: String? = nil) {
+        if let name = name {
+            customBehavior.name = name
+        }
+        if let description = description {
+            customBehavior.behaviorDescription = description
+        }
+        if let grade = grade {
+            customBehavior.grade = grade
+        }
+        saveContext()
+    }
+
+    /// 删除自定义行为
+    func deleteCustomBehavior(_ customBehavior: CustomBehavior) {
+        context.delete(customBehavior)
+        saveContext()
+    }
+
     // MARK: - Wish Operations
 
     /// 添加心愿
@@ -329,5 +394,11 @@ extension Behavior {
 extension Wish {
     static func fetchRequest() -> NSFetchRequest<Wish> {
         return NSFetchRequest<Wish>(entityName: "Wish")
+    }
+}
+
+extension CustomBehavior {
+    static func fetchRequest() -> NSFetchRequest<CustomBehavior> {
+        return NSFetchRequest<CustomBehavior>(entityName: "CustomBehavior")
     }
 }

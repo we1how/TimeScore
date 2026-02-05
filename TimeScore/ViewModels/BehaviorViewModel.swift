@@ -69,16 +69,19 @@ class BehaviorViewModel: ObservableObject {
     let availableGrades = ["S", "A", "B", "C", "D", "R1", "R2", "R3"]
 
     /// 预设行为名称（按等级分类）
-    let presetBehaviors: [String: [String]] = [
-        "S": ["深度学习", "创意突破", "攻克难题", "高强度训练", "关键对话"],
-        "A": ["项目工作", "写作", "编程", "阅读", "学习新技能", "健身"],
-        "B": ["邮件处理", "会议", "家务", "通勤", "日常事务"],
-        "C": ["无目的刷手机", "闲聊", "拖延", "低效等待"],
-        "D": ["熬夜", "暴饮暴食", "负面情绪沉溺", "过度游戏"],
-        "R1": ["喝水", "伸展", "深呼吸", "听音乐"],
-        "R2": ["小憩", "冥想", "散步", "轻度运动"],
-        "R3": ["午睡", "泡澡", "瑜伽", "户外运动", "社交聚会"]
+    let presetBehaviors: [String: [(name: String, desc: String)]] = [
+        "S": [("深度学习", "深度专注学习"), ("创意突破", "创造性工作"), ("攻克难题", "解决复杂问题"), ("高强度训练", "体能训练"), ("关键对话", "重要沟通")],
+        "A": [("项目工作", "项目开发"), ("写作", "内容创作"), ("编程", "代码开发"), ("阅读", "知识阅读"), ("学习新技能", "技能学习"), ("健身", "体育锻炼")],
+        "B": [("邮件处理", "邮件沟通"), ("会议", "团队会议"), ("家务", "日常家务"), ("通勤", "交通通勤"), ("日常事务", "日常任务")],
+        "C": [("无目的刷手机", "无意识浏览"), ("闲聊", "无目的聊天"), ("拖延", "任务拖延"), ("低效等待", "无效等待")],
+        "D": [("熬夜", "熬夜不睡"), ("暴饮暴食", "过量饮食"), ("负面情绪沉溺", "情绪内耗"), ("过度游戏", "游戏沉迷")],
+        "R1": [("喝水", "补充水分"), ("伸展", "身体伸展"), ("深呼吸", "呼吸放松"), ("听音乐", "音乐放松")],
+        "R2": [("小憩", "短暂休息"), ("冥想", "冥想练习"), ("散步", "轻松散步"), ("轻度运动", "轻度活动")],
+        "R3": [("午睡", "午休睡眠"), ("泡澡", "热水泡澡"), ("瑜伽", "瑜伽练习"), ("户外运动", "户外活动"), ("社交聚会", "社交活动")]
     ]
+
+    /// 用户自定义行为
+    @Published var customBehaviors: [String: [(name: String, desc: String)]] = [:]
 
     // MARK: - Initialization
 
@@ -178,9 +181,31 @@ class BehaviorViewModel: ObservableObject {
         behaviorName = name
     }
 
-    /// 获取推荐的行为列表
-    func recommendedBehaviors() -> [String] {
-        return presetBehaviors[grade] ?? []
+    /// 获取推荐的行为列表（预设 + 自定义）
+    func recommendedBehaviors() -> [(name: String, desc: String)] {
+        let presets = presetBehaviors[grade] ?? []
+        let customs = customBehaviors[grade] ?? []
+        return presets + customs
+    }
+
+    /// 加载用户的自定义行为
+    func loadCustomBehaviors(for user: User) {
+        let behaviors = dataManager.fetchCustomBehaviors(for: user)
+        var grouped: [String: [(name: String, desc: String)]] = [:]
+        for behavior in behaviors {
+            let entry = (name: behavior.name, desc: behavior.behaviorDescription ?? "")
+            if grouped[behavior.grade] == nil {
+                grouped[behavior.grade] = []
+            }
+            grouped[behavior.grade]?.append(entry)
+        }
+        customBehaviors = grouped
+    }
+
+    /// 添加自定义行为
+    func addCustomBehavior(for user: User, name: String, description: String?, grade: String) {
+        let _ = dataManager.addCustomBehavior(to: user, name: name, description: description, grade: grade)
+        loadCustomBehaviors(for: user)
     }
 
     // MARK: - Private Methods
