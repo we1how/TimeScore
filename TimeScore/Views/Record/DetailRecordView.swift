@@ -200,16 +200,22 @@ struct DetailRecordView: View {
                             .stroke(Color.borderColor, lineWidth: 1)
                     )
 
-                    // 时间输入
-                    Text(Date().formattedTime())
-                        .font(.system(size: 16, weight: .bold))
-                        .frame(width: 80, height: 44)
-                        .background(Color.white)
-                        .cornerRadius(20)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.borderColor, lineWidth: 1)
-                        )
+                    // 时间选择器 - 使用WheelPicker样式
+                    DatePicker(
+                        "",
+                        selection: $behaviorVM.recordTime,
+                        in: ...Date().addingTimeInterval(5 * 60), // 最大为当前时间后5分钟
+                        displayedComponents: .hourAndMinute
+                    )
+                    .labelsHidden()
+                    .datePickerStyle(.compact)
+                    .frame(height: 44)
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.borderColor, lineWidth: 1)
+                    )
                 }
             }
 
@@ -236,14 +242,25 @@ struct DetailRecordView: View {
 
             // 备注
             formSection(title: "Notes") {
-                TextField("What did you accomplish?", text: $behaviorVM.notes)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(12)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.borderColor, lineWidth: 1)
-                    )
+                ZStack(alignment: .topLeading) {
+                    if behaviorVM.notes.isEmpty {
+                        Text("What did you accomplish?")
+                            .foregroundColor(.gray.opacity(0.5))
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                    }
+                    TextEditor(text: $behaviorVM.notes)
+                        .font(.system(size: 16))
+                        .frame(minHeight: 80)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                }
+                .background(Color.white)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.borderColor, lineWidth: 1)
+                )
             }
         }
         .padding()

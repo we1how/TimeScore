@@ -32,6 +32,9 @@ class BehaviorViewModel: ObservableObject {
         }
     }
 
+    /// 记录时间
+    @Published var recordTime: Date = Date()
+
     /// 心情 (1-5)
     @Published var mood: Int = 3 {
         didSet {
@@ -131,7 +134,8 @@ class BehaviorViewModel: ObservableObject {
             mood: Int16(mood),
             notes: notes.isEmpty ? nil : notes,
             score: score,
-            energyChange: energyChange
+            energyChange: energyChange,
+            timestamp: recordTime
         )
 
         // 4. 更新精力 ViewModel
@@ -153,6 +157,9 @@ class BehaviorViewModel: ObservableObject {
 
         // 7. 重置表单
         resetForm()
+
+        // 8. 发送数据更新通知，让首页刷新
+        NotificationCenter.default.post(name: .behaviorRecorded, object: nil)
 
         return true
     }
@@ -182,10 +189,22 @@ class BehaviorViewModel: ObservableObject {
     }
 
     /// 获取推荐的行为列表（预设 + 自定义）
+    /// R等级特殊处理：返回R1+R2+R3的所有行为
     func recommendedBehaviors() -> [(name: String, desc: String)] {
-        let presets = presetBehaviors[grade] ?? []
-        let customs = customBehaviors[grade] ?? []
-        return presets + customs
+        if grade.hasPrefix("R") {
+            // R等级显示所有R1、R2、R3的行为
+            let r1Presets = presetBehaviors["R1"] ?? []
+            let r1Customs = customBehaviors["R1"] ?? []
+            let r2Presets = presetBehaviors["R2"] ?? []
+            let r2Customs = customBehaviors["R2"] ?? []
+            let r3Presets = presetBehaviors["R3"] ?? []
+            let r3Customs = customBehaviors["R3"] ?? []
+            return r1Presets + r1Customs + r2Presets + r2Customs + r3Presets + r3Customs
+        } else {
+            let presets = presetBehaviors[grade] ?? []
+            let customs = customBehaviors[grade] ?? []
+            return presets + customs
+        }
     }
 
     /// 加载用户的自定义行为
@@ -231,6 +250,7 @@ class BehaviorViewModel: ObservableObject {
         duration = 30
         mood = 3
         notes = ""
+        recordTime = Date()
         updateScorePreview()
     }
 }
@@ -282,4 +302,11 @@ extension BehaviorViewModel {
         }
         return nil
     }
+}
+
+// MARK: - Notifications
+
+extension Notification.Name {
+    /// 行为记录成功通知
+    static let behaviorRecorded = Notification.Name("behaviorRecorded")
 }

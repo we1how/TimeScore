@@ -54,25 +54,34 @@ struct BehaviorPickerView: View {
                     // 行为列表
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 24) {
-                            // 高优先级行为（与选中等级匹配）
-                            behaviorSection(
-                                title: "Grade \(selectedGrade) Behaviors",
-                                behaviors: getBehaviors(for: selectedGrade),
-                                grade: selectedGrade,
-                                isPrimary: true
-                            )
-
-                            // 其他等级行为
-                            ForEach(["S", "A", "B", "C", "D", "R1", "R2", "R3"].filter { $0 != selectedGrade }, id: \.self) { grade in
-                                let behaviors = getBehaviors(for: grade)
-                                if !behaviors.isEmpty {
-                                    behaviorSection(
-                                        title: "Grade \(grade) Behaviors",
-                                        behaviors: behaviors,
-                                        grade: grade,
-                                        isPrimary: false
-                                    )
-                                }
+                            if selectedGrade.hasPrefix("R") {
+                                // R等级显示三个分组
+                                behaviorSection(
+                                    title: "Light Recovery (R1)",
+                                    behaviors: getBehaviors(for: "R1"),
+                                    grade: "R1",
+                                    isPrimary: true
+                                )
+                                behaviorSection(
+                                    title: "Medium Recovery (R2)",
+                                    behaviors: getBehaviors(for: "R2"),
+                                    grade: "R2",
+                                    isPrimary: true
+                                )
+                                behaviorSection(
+                                    title: "Deep Recovery (R3)",
+                                    behaviors: getBehaviors(for: "R3"),
+                                    grade: "R3",
+                                    isPrimary: true
+                                )
+                            } else {
+                                // 其他等级只显示对应等级
+                                behaviorSection(
+                                    title: "Grade \(selectedGrade) Behaviors",
+                                    behaviors: getBehaviors(for: selectedGrade),
+                                    grade: selectedGrade,
+                                    isPrimary: true
+                                )
                             }
 
                             // 底部空间，为悬浮按钮留出位置

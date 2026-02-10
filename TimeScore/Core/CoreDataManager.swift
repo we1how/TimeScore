@@ -87,7 +87,8 @@ class CoreDataManager: ObservableObject {
         mood: Int16,
         notes: String? = nil,
         score: Double,
-        energyChange: Double
+        energyChange: Double,
+        timestamp: Date? = nil
     ) -> Behavior {
         let behavior = Behavior(context: context)
         behavior.id = UUID()
@@ -95,7 +96,7 @@ class CoreDataManager: ObservableObject {
         behavior.name = name
         behavior.duration = duration
         behavior.mood = mood
-        behavior.timestamp = Date()
+        behavior.timestamp = timestamp ?? Date()
         behavior.notes = notes
         behavior.score = score
         behavior.energyChange = energyChange

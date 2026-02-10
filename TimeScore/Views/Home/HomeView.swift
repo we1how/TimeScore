@@ -84,6 +84,10 @@ struct HomeView: View {
         .onDisappear {
             stopTimer()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .behaviorRecorded)) { _ in
+            // 当行为记录成功时刷新用户数据
+            loadUser()
+        }
     }
 
     // MARK: - Top Bar
