@@ -98,14 +98,14 @@ extension String {
     /// 等级显示名称
     var gradeDisplayName: String {
         switch self {
-        case "S":  return "S - 突破成长"
-        case "A":  return "A - 高效进展"
-        case "B":  return "B - 稳定维持"
-        case "C":  return "C - 浪费时间"
-        case "D":  return "D - 自我消耗"
-        case "R1": return "R1 - 轻度休息"
-        case "R2": return "R2 - 中度恢复"
-        case "R3": return "R3 - 深度恢复"
+        case "S":  return NSLocalizedString("grade.s", comment: "Grade S")
+        case "A":  return NSLocalizedString("grade.a", comment: "Grade A")
+        case "B":  return NSLocalizedString("grade.b", comment: "Grade B")
+        case "C":  return NSLocalizedString("grade.c", comment: "Grade C")
+        case "D":  return NSLocalizedString("grade.d", comment: "Grade D")
+        case "R1": return NSLocalizedString("grade.r1", comment: "Grade R1")
+        case "R2": return NSLocalizedString("grade.r2", comment: "Grade R2")
+        case "R3": return NSLocalizedString("grade.r3", comment: "Grade R3")
         default:   return self
         }
     }

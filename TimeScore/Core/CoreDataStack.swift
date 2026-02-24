@@ -75,7 +75,7 @@ class CoreDataStack {
         let userCurrentEnergy = NSAttributeDescription()
         userCurrentEnergy.name = "currentEnergy"
         userCurrentEnergy.attributeType = .doubleAttributeType
-        userCurrentEnergy.defaultValue = 100.0
+        userCurrentEnergy.defaultValue = 120.0
         userCurrentEnergy.isOptional = false
 
         let userLastResetDate = NSAttributeDescription()

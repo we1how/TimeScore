@@ -1,0 +1,115 @@
+/*
+  Localizable.strings
+  TimeScore
+
+  English localization
+*/
+
+// MARK: - Common
+"common.error" = "Error";
+"common.ok" = "OK";
+"common.unknown_error" = "Unknown error";
+"common.cancel" = "Cancel";
+"common.save" = "Save";
+"common.delete" = "Delete";
+"common.edit" = "Edit";
+"common.done" = "Done";
+
+// MARK: - Home View
+"home.streak.title" = "Streak";
+"home.streak.days" = "days";
+"home.total_points" = "Total Points";
+"home.energy" = "Energy";
+"home.recent_used" = "Recent";
+"home.clear" = "Clear";
+"home.recent_empty_hint" = "Recent behaviors will appear here after recording";
+
+"home.grade.s" = "S · Deep Work";
+"home.grade.a" = "A · High Output";
+"home.grade.b" = "B · Routine";
+"home.grade.c" = "C · Low Efficiency";
+"home.grade.d" = "D · Negative";
+"home.grade.r" = "R · Recovery";
+"home.recommended" = "Recommended";
+
+"home.grade.desc.s" = "Deep Work · High Value Output";
+"home.grade.desc.a" = "High Efficiency · Focused Execution";
+"home.grade.desc.b" = "Daily Tasks · Maintenance";
+"home.grade.desc.c" = "Low Efficiency · Time Wasting";
+"home.grade.desc.d" = "Negative Behavior · Harmful";
+"home.grade.desc.r" = "Energy Recovery · Rest";
+"home.grade.desc.default" = "Select grade to start timer";
+
+"home.timer.save" = "Save & Finish";
+"home.timer.cancel" = "Cancel";
+
+// MARK: - Wishlist View
+"wishlist.title" = "Wishlist";
+"wishlist.balance.title" = "Current Balance";
+"wishlist.points" = "PTS";
+"wishlist.add_title" = "Add New Wish";
+"wishlist.name_label" = "Wish Name";
+"wishlist.name_placeholder" = "e.g. New Gaming Console";
+"wishlist.cost_label" = "Point Cost";
+"wishlist.active_title" = "Active Wishes";
+"wishlist.progressing" = "PROGRESSING";
+"wishlist.goal_met" = "Goal Met";
+"wishlist.redeem" = "Redeem Now";
+"wishlist.insufficient" = "Insufficient Points";
+"wishlist.history_title" = "Redeemed History";
+"wishlist.redeemed_at" = "Redeemed";
+"wishlist.redeem_success" = "Redeemed!";
+"wishlist.awesome" = "Awesome!";
+
+"wishlist.error.user_not_initialized" = "User not initialized";
+"wishlist.error.empty_name" = "Please enter wish name";
+"wishlist.error.min_cost" = "Point cost must be at least %d";
+"wishlist.error.insufficient_points" = "Insufficient points or already redeemed";
+"wishlist.error.daily_limit" = "Daily redemption limit reached";
+"wishlist.error.redeem_failed" = "Redemption failed";
+
+// MARK: - Insights View
+"insights.title" = "Insights";
+"insights.total_points" = "Total Points";
+"insights.energy" = "Energy";
+"insights.streak" = "Streak";
+"insights.avg_mood" = "Avg Mood";
+"insights.behavior_nodes" = "Behavior Nodes";
+"insights.no_behaviors" = "No behaviors recorded yet";
+"insights.activity" = "Activity";
+"insights.minutes" = "min";
+"insights.weekly_performance" = "Weekly Performance";
+"insights.no_data" = "No data yet";
+"insights.consistency" = "Consistency";
+"insights.no_activity" = "No activity yet";
+"insights.less" = "Less";
+"insights.more" = "More";
+"insights.view_all" = "View All";
+"insights.positive" = "Positive";
+"insights.negative" = "Negative";
+"insights.today" = "Today";
+"insights.positive_score" = "Positive Score";
+"insights.negative_score" = "Negative Score";
+"insights.net_score" = "Net Score";
+"insights.daily_contribution" = "Daily Contribution";
+
+// MARK: - History
+"history.title" = "History";
+"history.today" = "Today";
+"history.unknown" = "Unknown";
+"history.minutes" = "min";
+
+// MARK: - Grades
+"grade.s" = "S - Breakthrough";
+"grade.a" = "A - High Progress";
+"grade.b" = "B - Stable";
+"grade.c" = "C - Time Wasting";
+"grade.d" = "D - Self Harm";
+"grade.r1" = "R1 - Light Rest";
+"grade.r2" = "R2 - Medium Recovery";
+"grade.r3" = "R3 - Deep Recovery";
+
+// MARK: - Wish Status
+"wish.status.pending" = "In Progress";
+"wish.status.redeemable" = "Ready";
+"wish.status.completed" = "Completed";

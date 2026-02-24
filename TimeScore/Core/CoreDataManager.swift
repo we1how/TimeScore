@@ -45,7 +45,7 @@ class CoreDataManager: ObservableObject {
         let user = User(context: context)
         user.id = id
         user.totalPoints = 0.0
-        user.currentEnergy = 100.0
+        user.currentEnergy = 120.0
         user.lastResetDate = Date()
         saveContext()
 
@@ -309,6 +309,11 @@ class CoreDataManager: ObservableObject {
     func getStatistics(for user: User) -> Statistics {
         let behaviors = fetchBehaviors(for: user)
 
+        print("[DEBUG] getStatistics - behaviors count: \(behaviors.count)")
+        for behavior in behaviors {
+            print("[DEBUG] behavior grade: \(behavior.grade)")
+        }
+
         // 计算连续天数
         let streak = calculateStreak(from: behaviors)
 
@@ -318,6 +323,7 @@ class CoreDataManager: ObservableObject {
         // 计算效率（正面行为占比）
         let positiveBehaviors = behaviors.filter { ["S", "A", "B"].contains($0.grade) }
         let efficiency = behaviors.isEmpty ? 0.0 : Double(positiveBehaviors.count) / Double(behaviors.count) * 100
+        print("[DEBUG] positiveBehaviors: \(positiveBehaviors.count), total: \(behaviors.count), efficiency: \(efficiency)")
 
         return Statistics(
             totalPoints: user.totalPoints,

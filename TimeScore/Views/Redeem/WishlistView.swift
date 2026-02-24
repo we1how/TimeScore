@@ -40,11 +40,14 @@ struct WishlistView: View {
             }
             .padding(.horizontal)
         }
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
         .background(Color.bgLight.ignoresSafeArea())
-        .alert("Error", isPresented: $exchangeVM.showError) {
-            Button("OK") {}
+        .alert(NSLocalizedString("common.error", comment: "Error"), isPresented: $exchangeVM.showError) {
+            Button(NSLocalizedString("common.ok", comment: "OK")) {}
         } message: {
-            Text(exchangeVM.errorMessage ?? "Unknown error")
+            Text(exchangeVM.errorMessage ?? NSLocalizedString("common.unknown_error", comment: "Unknown error"))
         }
         .fullScreenCover(isPresented: $exchangeVM.showRedeemAnimation) {
             if let wish = exchangeVM.lastRedeemedWish {
@@ -62,22 +65,12 @@ struct WishlistView: View {
 
     private var topBar: some View {
         HStack {
-            Button(action: {}) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(.black)
-            }
-
             Spacer()
 
-            Text("Wishlist")
+            Text(NSLocalizedString("wishlist.title", comment: "Wishlist title"))
                 .font(.system(size: 17, weight: .bold))
 
             Spacer()
-
-            // 占位，保持居中
-            Color.clear
-                .frame(width: 20, height: 20)
         }
         .padding(.vertical, 8)
     }
@@ -86,18 +79,18 @@ struct WishlistView: View {
 
     private var balanceSection: some View {
         VStack(spacing: 8) {
-            Text("Current Balance")
+            Text(NSLocalizedString("wishlist.balance.title", comment: "Current balance"))
                 .font(.system(size: 12, weight: .semibold))
                 .tracking(2)
                 .foregroundColor(.secondaryText)
                 .textCase(.uppercase)
 
             HStack(alignment: .lastTextBaseline, spacing: 8) {
-                Text("\(Int(exchangeVM.currentPoints))")
+                Text(exchangeVM.currentPoints.pointsDisplay)
                     .font(.system(size: 48, weight: .black, design: .rounded))
                     .foregroundColor(.black)
 
-                Text("PTS")
+                Text(NSLocalizedString("wishlist.points", comment: "Points"))
                     .font(.system(size: 12, weight: .bold))
                     .foregroundColor(.primaryGreen)
             }
@@ -109,36 +102,44 @@ struct WishlistView: View {
 
     private var addWishSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Add New Wish")
+            Text(NSLocalizedString("wishlist.add_title", comment: "Add new wish"))
                 .font(.system(size: 18, weight: .bold))
 
             VStack(spacing: 16) {
                 // 愿望名称
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Wish Name")
+                    Text(NSLocalizedString("wishlist.name_label", comment: "Wish name label"))
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.black.opacity(0.7))
 
-                    TextField("e.g. New Gaming Console", text: $exchangeVM.newWishName)
-                        .padding()
+                    TextField(NSLocalizedString("wishlist.name_placeholder", comment: "Wish name placeholder"), text: $exchangeVM.newWishName)
+                        .font(.system(size: 16))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
+                        .frame(height: 44)
                         .background(Color.white)
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(Color.borderColor, lineWidth: 1)
                         )
+                        .disableAutocorrection(true)
+                        .autocapitalization(.none)
                 }
 
                 // 积分成本和添加按钮
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Point Cost")
+                        Text(NSLocalizedString("wishlist.cost_label", comment: "Point cost label"))
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(.black.opacity(0.7))
 
                         TextField("1000", text: $exchangeVM.newWishCost)
                             .keyboardType(.numberPad)
-                            .padding()
+                            .font(.system(size: 16))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 10)
+                            .frame(height: 44)
                             .background(Color.white)
                             .cornerRadius(12)
                             .overlay(
@@ -180,12 +181,12 @@ struct WishlistView: View {
     private var activeWishesSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Active Wishes")
+                Text(NSLocalizedString("wishlist.active_title", comment: "Active wishes"))
                     .font(.system(size: 20, weight: .black))
 
                 Spacer()
 
-                Text("\(exchangeVM.activeWishes.count) PROGRESSING")
+                Text("\(exchangeVM.activeWishes.count) \(NSLocalizedString("wishlist.progressing", comment: "Progressing"))")
                     .font(.system(size: 11, weight: .bold))
                     .tracking(0.5)
                     .foregroundColor(.secondaryText)
@@ -212,7 +213,7 @@ struct WishlistView: View {
                     Text(wish.name)
                         .font(.system(size: 18, weight: .bold))
 
-                    Text("\(Int(user?.totalPoints ?? 0)) / \(Int(wish.cost)) PTS")
+                    Text("\((user?.totalPoints ?? 0).pointsDisplay) / \(wish.cost.pointsDisplay) \(NSLocalizedString("wishlist.points", comment: "Points"))")
                         .font(.system(size: 14, weight: .bold))
                         .foregroundColor(.secondaryText)
                 }
@@ -220,7 +221,7 @@ struct WishlistView: View {
                 Spacer()
 
                 if isRedeemable {
-                    Text("Goal Met")
+                    Text(NSLocalizedString("wishlist.goal_met", comment: "Goal met"))
                         .font(.system(size: 10, weight: .black))
                         .tracking(0.5)
                         .foregroundColor(.primaryGreen)
@@ -262,7 +263,7 @@ struct WishlistView: View {
                             .font(.system(size: 16))
                     }
 
-                    Text(isRedeemable ? "Redeem Now" : "Insufficient Points")
+                    Text(isRedeemable ? NSLocalizedString("wishlist.redeem", comment: "Redeem now") : NSLocalizedString("wishlist.insufficient", comment: "Insufficient points"))
                         .font(.system(size: 16, weight: .bold))
                 }
                 .foregroundColor(isRedeemable ? .black : .secondaryText)
@@ -288,7 +289,7 @@ struct WishlistView: View {
 
     private var redeemedHistorySection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Redeemed History")
+            Text(NSLocalizedString("wishlist.history_title", comment: "Redeemed history"))
                 .font(.system(size: 12, weight: .bold))
                 .tracking(2)
                 .foregroundColor(.gray)
@@ -327,7 +328,7 @@ struct WishlistView: View {
                     .strikethrough()
 
                 if let redeemedAt = wish.redeemedAt {
-                    Text("Redeemed \(redeemedAt.formattedDate())")
+                    Text("\(NSLocalizedString("wishlist.redeemed_at", comment: "Redeemed at")) \(redeemedAt.formattedDate())")
                         .font(.system(size: 12))
                         .foregroundColor(.gray)
                         .italic()
@@ -336,7 +337,7 @@ struct WishlistView: View {
 
             Spacer()
 
-            Text("\(Int(wish.cost)) PTS")
+            Text("\(wish.cost.pointsDisplay) \(NSLocalizedString("wishlist.points", comment: "Points"))")
                 .font(.system(size: 12, design: .monospaced))
                 .foregroundColor(.gray)
         }
@@ -389,7 +390,7 @@ struct RedeemAnimationView: View {
 
                 // 文字
                 VStack(spacing: 8) {
-                    Text("Redeemed!")
+                    Text(NSLocalizedString("wishlist.redeem_success", comment: "Redeemed success"))
                         .font(.system(size: 36, weight: .black))
                         .foregroundColor(.white)
 
@@ -397,7 +398,7 @@ struct RedeemAnimationView: View {
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.white.opacity(0.8))
 
-                    Text("-\(Int(wish.cost)) PTS")
+                    Text("-\(wish.cost.pointsDisplay) \(NSLocalizedString("wishlist.points", comment: "Points"))")
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(.primaryGreen)
                         .padding(.top, 8)
@@ -407,7 +408,7 @@ struct RedeemAnimationView: View {
 
                 // 完成按钮
                 Button(action: onComplete) {
-                    Text("Awesome!")
+                    Text(NSLocalizedString("wishlist.awesome", comment: "Awesome"))
                         .font(.system(size: 17, weight: .bold))
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity)

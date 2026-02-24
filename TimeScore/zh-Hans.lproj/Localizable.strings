@@ -1,0 +1,115 @@
+/*
+  Localizable.strings
+  TimeScore
+
+  简体中文本地化
+*/
+
+// MARK: - 通用
+"common.error" = "错误";
+"common.ok" = "确定";
+"common.unknown_error" = "未知错误";
+"common.cancel" = "取消";
+"common.save" = "保存";
+"common.delete" = "删除";
+"common.edit" = "编辑";
+"common.done" = "完成";
+
+// MARK: - 首页
+"home.streak.title" = "连续打卡";
+"home.streak.days" = "天";
+"home.total_points" = "总积分";
+"home.energy" = "精力值";
+"home.recent_used" = "最近使用";
+"home.clear" = "清空";
+"home.recent_empty_hint" = "记录行为后会显示最近使用的快捷入口";
+
+"home.grade.s" = "S级 · 深度工作";
+"home.grade.a" = "A级 · 高效产出";
+"home.grade.b" = "B级 · 日常事务";
+"home.grade.c" = "C级 · 低效行为";
+"home.grade.d" = "D级 · 消极行为";
+"home.grade.r" = "R级 · 恢复精力";
+"home.recommended" = "推荐行为";
+
+"home.grade.desc.s" = "深度工作 · 高价值产出";
+"home.grade.desc.a" = "高效产出 · 专注执行";
+"home.grade.desc.b" = "日常事务 · 维持运转";
+"home.grade.desc.c" = "低效行为 · 时间浪费";
+"home.grade.desc.d" = "消极行为 · 损害成长";
+"home.grade.desc.r" = "恢复精力 · 充电休息";
+"home.grade.desc.default" = "选择等级开始计时";
+
+"home.timer.save" = "完成并保存";
+"home.timer.cancel" = "放弃";
+
+// MARK: - 心愿单
+"wishlist.title" = "心愿单";
+"wishlist.balance.title" = "当前余额";
+"wishlist.points" = "积分";
+"wishlist.add_title" = "添加新愿望";
+"wishlist.name_label" = "愿望名称";
+"wishlist.name_placeholder" = "例如：新游戏主机";
+"wishlist.cost_label" = "积分成本";
+"wishlist.active_title" = "进行中";
+"wishlist.progressing" = "进行中";
+"wishlist.goal_met" = "目标达成";
+"wishlist.redeem" = "立即兑换";
+"wishlist.insufficient" = "积分不足";
+"wishlist.history_title" = "兑换历史";
+"wishlist.redeemed_at" = "兑换于";
+"wishlist.redeem_success" = "兑换成功！";
+"wishlist.awesome" = "太棒了！";
+
+"wishlist.error.user_not_initialized" = "用户未初始化";
+"wishlist.error.empty_name" = "请输入愿望名称";
+"wishlist.error.min_cost" = "积分成本至少需要 %d";
+"wishlist.error.insufficient_points" = "积分不足或已兑换";
+"wishlist.error.daily_limit" = "今日兑换次数已达上限";
+"wishlist.error.redeem_failed" = "兑换失败";
+
+// MARK: - 数据洞察
+"insights.title" = "数据洞察";
+"insights.total_points" = "总积分";
+"insights.energy" = "精力值";
+"insights.streak" = "连续打卡";
+"insights.avg_mood" = "平均心情";
+"insights.behavior_nodes" = "行为记录";
+"insights.no_behaviors" = "还没有记录任何行为";
+"insights.activity" = "活动";
+"insights.minutes" = "分钟";
+"insights.weekly_performance" = "本周表现";
+"insights.no_data" = "暂无数据";
+"insights.consistency" = "连续性";
+"insights.no_activity" = "暂无活动";
+"insights.less" = "少";
+"insights.more" = "多";
+"insights.view_all" = "查看全部";
+"insights.positive" = "正向";
+"insights.negative" = "负向";
+"insights.today" = "今天";
+"insights.positive_score" = "正分合计";
+"insights.negative_score" = "负分合计";
+"insights.net_score" = "净分值";
+"insights.daily_contribution" = "今日贡献";
+
+// MARK: - 历史记录
+"history.title" = "历史记录";
+"history.today" = "今天";
+"history.unknown" = "未知活动";
+"history.minutes" = "分钟";
+
+// MARK: - 等级
+"grade.s" = "S - 突破成长";
+"grade.a" = "A - 高效进展";
+"grade.b" = "B - 稳定维持";
+"grade.c" = "C - 浪费时间";
+"grade.d" = "D - 自我消耗";
+"grade.r1" = "R1 - 轻度休息";
+"grade.r2" = "R2 - 中度恢复";
+"grade.r3" = "R3 - 深度恢复";
+
+// MARK: - 愿望状态
+"wish.status.pending" = "进行中";
+"wish.status.redeemable" = "可兑换";
+"wish.status.completed" = "已完成";

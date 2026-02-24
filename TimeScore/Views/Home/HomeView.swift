@@ -4,6 +4,7 @@
 //
 //  首页/快速记录界面
 //  对应 UI 原型: 首页+简易记录行为界面.html
+//  P0更新: 添加震动反馈、连续打卡显示、最近行为快捷标签
 //
 
 import SwiftUI
@@ -14,6 +15,7 @@ struct HomeView: View {
 
     @StateObject private var behaviorVM = BehaviorViewModel()
     @StateObject private var energyVM = EnergyViewModel()
+    @StateObject private var recentManager = RecentBehaviorManager.shared
 
     @State private var user: User?
     @State private var showDetailRecord = false
@@ -24,6 +26,10 @@ struct HomeView: View {
     @State private var elapsedTime: TimeInterval = 0
     @State private var timer: Timer?
     @State private var startTime: Date?
+
+    // P0: 统计数据
+    @State private var streakDays = 0
+    @State private var showStreakAnimation = false
 
     // MARK: - Body
 
@@ -39,9 +45,15 @@ struct HomeView: View {
 
                 // 主内容（可滚动）
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: 28) {
+                    VStack(spacing: 24) {
+                        // P0: 连续打卡显示
+                        streakSection
+
                         // 积分和能量区域
                         scoreAndEnergySection
+
+                        // P0: 最近行为快捷标签
+                        recentBehaviorSection
 
                         // 等级选择器
                         gradeSelector
@@ -80,13 +92,77 @@ struct HomeView: View {
         }
         .onAppear {
             loadUser()
+            loadStreak()
+            // 如果之前有正在进行的计时，恢复它
+            if isRunning && elapsedTime > 0 {
+                startTimer()
+            }
+            // P0: 请求通知权限
+            NotificationManager.shared.requestAuthorization { granted in
+                if granted {
+                    NotificationManager.shared.setupDefaultReminders()
+                }
+            }
         }
         .onDisappear {
-            stopTimer()
+            // 暂停计时器但保留状态，这样切回来可以继续
+            pauseTimer()
         }
         .onReceive(NotificationCenter.default.publisher(for: .behaviorRecorded)) { _ in
-            // 当行为记录成功时刷新用户数据
+            // 当行为记录成功时刷新用户数据和最近行为
             loadUser()
+            loadStreak()
+            // P0: 添加震动反馈
+            HapticManager.shared.saveSuccess()
+            // P0: 记录最近行为
+            if let lastResult = behaviorVM.lastRecordResult {
+                recentManager.addRecentBehavior(
+                    name: lastResult.behavior.name ?? "",
+                    grade: lastResult.behavior.grade ?? "B"
+                )
+            }
+        }
+    }
+
+    // MARK: - P0: Streak Section
+
+    private var streakSection: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "flame.fill")
+                .font(.system(size: 16))
+                .foregroundColor(.orange)
+                .scaleEffect(showStreakAnimation ? 1.2 : 1.0)
+                .animation(.spring(response: 0.3, dampingFraction: 0.5), value: showStreakAnimation)
+
+            Text(NSLocalizedString("home.streak.title", comment: "Streak title"))
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(.gray)
+
+            Text("\(streakDays)")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.orange)
+
+            Text(NSLocalizedString("home.streak.days", comment: "Days"))
+                .font(.system(size: 12))
+                .foregroundColor(.gray)
+
+            if streakDays >= 7 {
+                Text("🔥")
+                    .font(.system(size: 14))
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(20)
+        .onTapGesture {
+            withAnimation {
+                showStreakAnimation = true
+                HapticManager.shared.streakMilestone()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    showStreakAnimation = false
+                }
+            }
         }
     }
 
@@ -97,7 +173,10 @@ struct HomeView: View {
             Spacer()
 
             // 搜索行为按钮
-            Button(action: { showBehaviorPicker = true }) {
+            Button(action: {
+                HapticManager.shared.lightImpact()
+                showBehaviorPicker = true
+            }) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 22, weight: .medium))
                     .foregroundColor(.black)
@@ -115,23 +194,25 @@ struct HomeView: View {
     private var scoreAndEnergySection: some View {
         VStack(spacing: 12) {
             // Total Points 标签
-            Text("Total Points")
+            Text(NSLocalizedString("home.total_points", comment: "Total points"))
                 .font(.system(size: 10, weight: .medium))
                 .tracking(2)
                 .foregroundColor(.gray)
                 .textCase(.uppercase)
 
             // 大号积分显示
-            Text("\(Int(user?.totalPoints ?? 0))")
+            Text("\(String(format: "%.0f", user?.totalPoints ?? 0))")
                 .font(.system(size: 72, weight: .thin, design: .rounded))
                 .tracking(-2)
                 .foregroundColor(.black)
 
             // 能量指示器
             HStack(spacing: 8) {
-                Text("\(Int(user?.currentEnergy ?? 100))% Energy")
-                    .font(.system(size: 14, weight: .light))
-                    .foregroundColor(.secondaryText)
+                Text(NSLocalizedString("home.energy", comment: "Energy"))
+                    .font(.system(size: 10, weight: .medium))
+                    .tracking(2)
+                    .foregroundColor(.gray)
+                    .textCase(.uppercase)
 
                 // 能量进度条
                 GeometryReader { geometry in
@@ -143,14 +224,112 @@ struct HomeView: View {
                         RoundedRectangle(cornerRadius: 1)
                             .fill(Color.vibrantGreen)
                             .frame(
-                                width: geometry.size.width * ((user?.currentEnergy ?? 100) / 100.0),
+                                width: geometry.size.width * ((user?.currentEnergy ?? 100) / 120.0),
                                 height: 2
                             )
                     }
                 }
                 .frame(width: 100, height: 2)
+
+                Text("\(Int(user?.currentEnergy ?? 100))/120")
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundColor(.secondaryText)
             }
-            .frame(maxWidth: 200)
+            .frame(maxWidth: 300)
+        }
+    }
+
+    // MARK: - P0: Recent Behavior Section
+
+    private var recentBehaviorSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(NSLocalizedString("home.recent_used", comment: "Recent used"))
+                    .font(.system(size: 12, weight: .medium))
+                    .tracking(1)
+                    .foregroundColor(.gray)
+                    .textCase(.uppercase)
+
+                Spacer()
+
+                if !recentManager.recentBehaviors.isEmpty {
+                    Button(action: {
+                        HapticManager.shared.lightImpact()
+                        recentManager.clearRecentBehaviors()
+                    }) {
+                        Text(NSLocalizedString("home.clear", comment: "Clear"))
+                            .font(.system(size: 11))
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .padding(.horizontal, 20)
+
+            // 最近行为标签
+            if recentManager.recentBehaviors.isEmpty {
+                Text(NSLocalizedString("home.recent_empty_hint", comment: "Recent empty hint"))
+                    .font(.system(size: 13))
+                    .foregroundColor(.gray)
+                    .padding(.horizontal, 20)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(recentManager.recentBehaviors, id: \.timestamp) { behavior in
+                            recentBehaviorPill(behavior)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                }
+            }
+        }
+        .frame(height: recentManager.recentBehaviors.isEmpty ? 50 : 80)
+    }
+
+    private func recentBehaviorPill(_ behavior: (name: String, grade: String, timestamp: Date)) -> some View {
+        Button(action: {
+            HapticManager.shared.mediumImpact()
+            withAnimation(.easeOut(duration: 0.2)) {
+                // 设置等级和行为
+                behaviorVM.grade = behavior.grade
+                behaviorVM.selectBehavior(behavior.name)
+            }
+        }) {
+            HStack(spacing: 6) {
+                // 等级标识
+                Text(behavior.grade.prefix(1))
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(width: 18, height: 18)
+                    .background(gradeColor(behavior.grade))
+                    .clipShape(Circle())
+
+                Text(behavior.name)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.black.opacity(0.8))
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(Color.gray.opacity(0.08))
+            .overlay(
+                Capsule()
+                    .stroke(gradeColor(behavior.grade).opacity(0.3), lineWidth: 1)
+            )
+            .clipShape(Capsule())
+        }
+        .buttonStyle(PlainButtonStyle())
+        .disabled(isRunning)
+        .opacity(isRunning ? 0.5 : 1.0)
+    }
+
+    private func gradeColor(_ grade: String) -> Color {
+        switch grade.prefix(1) {
+        case "S": return Color(red: 0.2, green: 0.8, blue: 0.4)
+        case "A": return Color(red: 0.3, green: 0.7, blue: 0.9)
+        case "B": return Color(red: 0.5, green: 0.5, blue: 0.5)
+        case "C": return Color(red: 0.9, green: 0.6, blue: 0.2)
+        case "D": return Color(red: 0.9, green: 0.3, blue: 0.3)
+        case "R": return Color(red: 0.5, green: 0.4, blue: 0.9)
+        default: return Color.gray
         }
     }
 
@@ -177,28 +356,24 @@ struct HomeView: View {
     // 当前等级描述
     private var currentGradeDescription: String {
         let grade = behaviorVM.grade
-        if grade.hasPrefix("S") { return "深度工作 · 高价值产出" }
-        if grade.hasPrefix("A") { return "高效产出 · 专注执行" }
-        if grade.hasPrefix("B") { return "日常事务 · 维持运转" }
-        if grade.hasPrefix("C") { return "低效行为 · 时间浪费" }
-        if grade.hasPrefix("D") { return "消极行为 · 损害成长" }
-        if grade.hasPrefix("R") { return "恢复精力 · 充电休息" }
-        return "选择等级开始计时"
+        if grade.hasPrefix("S") { return NSLocalizedString("home.grade.desc.s", comment: "Grade S description") }
+        if grade.hasPrefix("A") { return NSLocalizedString("home.grade.desc.a", comment: "Grade A description") }
+        if grade.hasPrefix("B") { return NSLocalizedString("home.grade.desc.b", comment: "Grade B description") }
+        if grade.hasPrefix("C") { return NSLocalizedString("home.grade.desc.c", comment: "Grade C description") }
+        if grade.hasPrefix("D") { return NSLocalizedString("home.grade.desc.d", comment: "Grade D description") }
+        if grade.hasPrefix("R") { return NSLocalizedString("home.grade.desc.r", comment: "Grade R description") }
+        return NSLocalizedString("home.grade.desc.default", comment: "Default grade description")
     }
 
     private func gradeButton(_ grade: String) -> some View {
         let isSelected = behaviorVM.grade.hasPrefix(grade)
 
         return Button(action: {
+            HapticManager.shared.lightImpact()
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 // 设置新等级
                 let newGrade = grade == "R" ? "R2" : grade
                 behaviorVM.grade = newGrade
-
-                // 如果正在计时，先停止
-                if isRunning {
-                    pauseTimer()
-                }
 
                 // 自动选择该等级的第一个推荐行为
                 let recommendedBehaviors = behaviorVM.recommendedBehaviors()
@@ -222,6 +397,8 @@ struct HomeView: View {
             }
             .frame(width: 44, height: 44)
         }
+        .disabled(isRunning)
+        .opacity(isRunning ? 0.5 : 1.0)
     }
 
     // MARK: - Stopwatch Section
@@ -234,24 +411,19 @@ struct HomeView: View {
                 .foregroundColor(isRunning ? .vibrantGreen : .black)
                 .tracking(2)
 
-            // 预计得分
-//            if elapsedTime > 0 {
-//                Text("预计获得 \(Int(behaviorVM.previewScore * (elapsedTime / 60.0))) 分")
-//                    .font(.system(size: 14))
-//                    .foregroundColor(.secondaryText)
-//            }
-
             // 播放/暂停按钮
             Button(action: {
                 if isRunning {
+                    HapticManager.shared.timerPause()
                     pauseTimer()
                 } else {
+                    HapticManager.shared.timerStart()
                     startTimer()
                 }
             }) {
                 ZStack {
                     Circle()
-                        .fill(Color.vibrantGreen)
+                        .fill(canStartTimer ? Color.vibrantGreen : Color.gray.opacity(0.3))
                         .frame(width: 80, height: 80)
                         .shadow(color: canStartTimer ? Color.vibrantGreen.opacity(0.4) : Color.clear, radius: 12, x: 0, y: 6)
 
@@ -262,14 +434,14 @@ struct HomeView: View {
                 }
             }
             .disabled(!canStartTimer)
-//            .opacity(canStartTimer ? 1.0 : 0.5)
 
             // 停止并保存按钮（仅在暂停时显示）
             if !isRunning && elapsedTime > 0 {
                 Button(action: {
+                    HapticManager.shared.heavyImpact()
                     saveRecord()
                 }) {
-                    Text("完成并保存")
+                    Text(NSLocalizedString("home.timer.save", comment: "Save timer"))
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundColor(.white)
                         .frame(width: 160, height: 48)
@@ -278,9 +450,10 @@ struct HomeView: View {
                 }
 
                 Button(action: {
+                    HapticManager.shared.lightImpact()
                     resetStopwatch()
                 }) {
-                    Text("放弃")
+                    Text(NSLocalizedString("home.timer.cancel", comment: "Cancel timer"))
                         .font(.system(size: 14))
                         .foregroundColor(.gray)
                         .padding(.top, 8)
@@ -385,24 +558,21 @@ struct HomeView: View {
     // 根据等级返回标签文字
     private var gradeLabel: String {
         let grade = behaviorVM.grade
-        if grade.hasPrefix("S") { return "S级 · 深度工作" }
-        if grade.hasPrefix("A") { return "A级 · 高效产出" }
-        if grade.hasPrefix("B") { return "B级 · 日常事务" }
-        if grade.hasPrefix("C") { return "C级 · 低效行为" }
-        if grade.hasPrefix("D") { return "D级 · 消极行为" }
-        if grade.hasPrefix("R") { return "R级 · 恢复精力" }
-        return "推荐行为"
+        if grade.hasPrefix("S") { return NSLocalizedString("home.grade.s", comment: "Grade S label") }
+        if grade.hasPrefix("A") { return NSLocalizedString("home.grade.a", comment: "Grade A label") }
+        if grade.hasPrefix("B") { return NSLocalizedString("home.grade.b", comment: "Grade B label") }
+        if grade.hasPrefix("C") { return NSLocalizedString("home.grade.c", comment: "Grade C label") }
+        if grade.hasPrefix("D") { return NSLocalizedString("home.grade.d", comment: "Grade D label") }
+        if grade.hasPrefix("R") { return NSLocalizedString("home.grade.r", comment: "Grade R label") }
+        return NSLocalizedString("home.recommended", comment: "Recommended label")
     }
 
     private func behaviorPill(_ behavior: (name: String, desc: String)) -> some View {
         let isSelected = behaviorVM.behaviorName == behavior.name
 
         return Button(action: {
+            HapticManager.shared.lightImpact()
             withAnimation(.easeOut(duration: 0.2)) {
-                // 如果正在计时，先停止
-                if isRunning {
-                    pauseTimer()
-                }
                 behaviorVM.selectBehavior(behavior.name)
             }
         }) {
@@ -427,14 +597,33 @@ struct HomeView: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
+        .disabled(isRunning)
+        .opacity(isRunning ? 0.5 : 1.0)
     }
 
     // MARK: - Helpers
 
     private func loadUser() {
+        // 刷新 CoreData 上下文以确保获取最新数据
+        CoreDataStack.shared.viewContext.refreshAllObjects()
+
         user = CoreDataManager.shared.fetchOrCreateUser()
         if let user = user {
             energyVM.updateEnergy(user.currentEnergy)
+        }
+    }
+
+    private func loadStreak() {
+        if let user = user {
+            let stats = CoreDataManager.shared.getStatistics(for: user)
+            streakDays = stats.streak
+
+            // 如果 streak 达到里程碑，触发特殊效果
+            if streakDays > 0 && streakDays % 7 == 0 {
+                withAnimation {
+                    showStreakAnimation = true
+                }
+            }
         }
     }
 }

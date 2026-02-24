@@ -69,19 +69,19 @@ class ExchangeViewModel: ObservableObject {
     /// 对应 Python: add_wish()
     func addWish() {
         guard let user = user else {
-            showError("用户未初始化")
+            showError(NSLocalizedString("wishlist.error.user_not_initialized", comment: "User not initialized"))
             return
         }
 
         // 验证名称
         guard !newWishName.trimmingCharacters(in: .whitespaces).isEmpty else {
-            showError("请输入愿望名称")
+            showError(NSLocalizedString("wishlist.error.empty_name", comment: "Empty name"))
             return
         }
 
         // 验证成本
         guard let cost = Double(newWishCost), cost >= ExchangeViewModel.minimumCost else {
-            showError("积分成本至少需要 \(Int(ExchangeViewModel.minimumCost))")
+            showError(String(format: NSLocalizedString("wishlist.error.min_cost", comment: "Min cost"), Int(ExchangeViewModel.minimumCost)))
             return
         }
 
@@ -100,19 +100,19 @@ class ExchangeViewModel: ObservableObject {
     /// 对应 Python: redeem_wish()
     func redeemWish(_ wish: Wish) {
         guard let user = user else {
-            showError("用户未初始化")
+            showError(NSLocalizedString("wishlist.error.user_not_initialized", comment: "User not initialized"))
             return
         }
 
         // 检查是否已满足
         guard wish.isRedeemable else {
-            showError("积分不足或已兑换")
+            showError(NSLocalizedString("wishlist.error.insufficient_points", comment: "Insufficient points"))
             return
         }
 
         // 检查每日限制
         if hasReachedDailyLimit() {
-            showError("今日兑换次数已达上限")
+            showError(NSLocalizedString("wishlist.error.daily_limit", comment: "Daily limit"))
             return
         }
 
@@ -122,7 +122,7 @@ class ExchangeViewModel: ObservableObject {
             showRedeemAnimation = true
             loadWishes() // 刷新列表
         } else {
-            showError("兑换失败")
+            showError(NSLocalizedString("wishlist.error.redeem_failed", comment: "Redeem failed"))
         }
     }
 
@@ -226,9 +226,9 @@ extension Wish {
     var statusDisplay: String {
         switch status {
         case "pending":
-            return isRedeemable ? "可兑换" : "进行中"
+            return isRedeemable ? NSLocalizedString("wish.status.redeemable", comment: "Redeemable") : NSLocalizedString("wish.status.pending", comment: "Pending")
         case "redeemed":
-            return "已完成"
+            return NSLocalizedString("wish.status.completed", comment: "Completed")
         default:
             return status
         }
