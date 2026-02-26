@@ -8,6 +8,7 @@
 
 import UserNotifications
 import Foundation
+import UIKit
 
 /// 通知管理器
 class NotificationManager: ObservableObject {
@@ -164,7 +165,13 @@ class NotificationManager: ObservableObject {
     }
     
     // MARK: - 取消通知
-    
+
+    /// Bug Fix 8: 清除应用图标小红点
+    func clearBadge() {
+        UNUserNotificationCenter.current().setBadgeCount(0)
+        UIApplication.shared.applicationIconBadgeNumber = 0
+    }
+
     /// 取消特定通知
     func cancelNotification(identifier: String) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])

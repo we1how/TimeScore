@@ -35,16 +35,19 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         completionHandler([.banner, .sound, .badge])
     }
 
-    // 处理通知点击
+    // Bug Fix 8: 处理通知点击时清除小红点
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         print("通知被点击: \(userInfo)")
+        // 清除小红点
+        NotificationManager.shared.clearBadge()
         completionHandler()
     }
 
-    // 应用进入前台时刷新 Widget
+    // Bug Fix 8: 应用进入前台时刷新 Widget 并清除小红点
     func applicationDidBecomeActive(_ application: UIApplication) {
         WidgetCenter.shared.reloadAllTimelines()
+        NotificationManager.shared.clearBadge()
     }
 }
 

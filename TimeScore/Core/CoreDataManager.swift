@@ -64,6 +64,26 @@ class CoreDataManager: ObservableObject {
         saveContext()
     }
 
+    // Bug Fix 7: 检查并执行每日精力重置
+    /// 如果上次重置不是今天，将精力重置为默认值
+    /// - Returns: 是否执行了重置
+    @discardableResult
+    func checkAndResetDailyEnergy(for user: User) -> Bool {
+        let calendar = Calendar.current
+        let lastReset = user.lastResetDate ?? Date.distantPast
+
+        // 检查上次重置是否是今天
+        if !calendar.isDateInToday(lastReset) {
+            // 重置精力为默认值100
+            user.currentEnergy = EnergyViewModel.defaultEnergy
+            user.lastResetDate = Date()
+            saveContext()
+            print("[DEBUG] 每日精力重置完成: \(user.currentEnergy)")
+            return true
+        }
+        return false
+    }
+
     // MARK: - Behavior Operations
 
     /// 添加行为记录

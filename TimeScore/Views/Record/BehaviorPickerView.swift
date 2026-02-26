@@ -7,6 +7,22 @@
 //
 
 import SwiftUI
+import CoreData
+
+/// Bug Fix 6: 用于编辑的包装结构体，符合 Identifiable 以便使用 sheet(item:)
+struct EditableBehavior: Identifiable {
+    let id: NSManagedObjectID
+    let name: String
+    let desc: String
+    let grade: String
+
+    init(from behavior: CustomBehavior) {
+        self.id = behavior.objectID
+        self.name = behavior.name
+        self.desc = behavior.behaviorDescription ?? ""
+        self.grade = behavior.grade
+    }
+}
 
 struct BehaviorPickerView: View {
 
@@ -19,8 +35,7 @@ struct BehaviorPickerView: View {
 
     @State private var searchText: String = ""
     @State private var showCreateBehavior = false
-    @State private var showEditBehavior = false
-    @State private var selectedBehavior: (name: String, desc: String, grade: String, isCustom: Bool)? = nil
+    @State private var selectedBehavior: EditableBehavior? = nil
     @State private var customBehaviors: [CustomBehavior] = []
     @State private var user: User?
 
@@ -110,18 +125,17 @@ struct BehaviorPickerView: View {
                     addCustomBehavior(name: name, description: desc, grade: grade)
                 }
             }
-            .sheet(isPresented: $showEditBehavior) {
-                if let behavior = selectedBehavior {
-                    EditBehaviorView(
-                        behavior: behavior,
-                        onSave: { newName, newDesc in
-                            updateCustomBehavior(name: behavior.name, newName: newName, newDesc: newDesc)
-                        },
-                        onDelete: {
-                            deleteCustomBehavior(name: behavior.name, grade: behavior.grade)
-                        }
-                    )
-                }
+            // Bug Fix 6: 使用 sheet(item:) 模式确保数据可靠传递
+            .sheet(item: $selectedBehavior) { behavior in
+                EditBehaviorView(
+                    behavior: behavior,
+                    onSave: { newName, newDesc in
+                        updateCustomBehavior(id: behavior.id, newName: newName, newDesc: newDesc)
+                    },
+                    onDelete: {
+                        deleteCustomBehavior(id: behavior.id)
+                    }
+                )
             }
             .onAppear {
                 loadUserAndBehaviors()
@@ -168,16 +182,16 @@ struct BehaviorPickerView: View {
         customBehaviors = dataManager.fetchCustomBehaviors(for: user)
     }
 
-    private func updateCustomBehavior(name: String, newName: String, newDesc: String?) {
+    private func updateCustomBehavior(id: NSManagedObjectID, newName: String, newDesc: String?) {
         guard let user = user,
-              let behavior = customBehaviors.first(where: { $0.name == name }) else { return }
+              let behavior = customBehaviors.first(where: { $0.objectID == id }) else { return }
         dataManager.updateCustomBehavior(behavior, name: newName, description: newDesc)
         customBehaviors = dataManager.fetchCustomBehaviors(for: user)
     }
 
-    private func deleteCustomBehavior(name: String, grade: String) {
+    private func deleteCustomBehavior(id: NSManagedObjectID) {
         guard let user = user,
-              let behavior = customBehaviors.first(where: { $0.name == name && $0.grade == grade }) else { return }
+              let behavior = customBehaviors.first(where: { $0.objectID == id }) else { return }
         dataManager.deleteCustomBehavior(behavior)
         customBehaviors = dataManager.fetchCustomBehaviors(for: user)
     }
@@ -283,10 +297,10 @@ struct BehaviorPickerView: View {
             Spacer()
 
             // Edit 按钮（只有自定义行为可编辑）
-            if behavior.isCustom {
+            if behavior.isCustom,
+               let customBehavior = customBehaviors.first(where: { $0.name == behavior.name && $0.grade == grade }) {
                 Button(action: {
-                    selectedBehavior = (name: behavior.name, desc: behavior.desc, grade: grade, isCustom: true)
-                    showEditBehavior = true
+                    selectedBehavior = EditableBehavior(from: customBehavior)
                 }) {
                     Text("Edit")
                         .font(.system(size: 12, weight: .medium))
@@ -488,7 +502,7 @@ struct CreateBehaviorView: View {
 struct EditBehaviorView: View {
     @Environment(\.dismiss) private var dismiss
 
-    let behavior: (name: String, desc: String, grade: String, isCustom: Bool)
+    let behavior: EditableBehavior
     let onSave: (String, String?) -> Void
     let onDelete: () -> Void
 
@@ -496,7 +510,7 @@ struct EditBehaviorView: View {
     @State private var behaviorDesc: String
     @State private var showDeleteConfirm = false
 
-    init(behavior: (name: String, desc: String, grade: String, isCustom: Bool),
+    init(behavior: EditableBehavior,
          onSave: @escaping (String, String?) -> Void,
          onDelete: @escaping () -> Void) {
         self.behavior = behavior

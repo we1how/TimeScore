@@ -113,3 +113,16 @@
 "wish.status.pending" = "进行中";
 "wish.status.redeemable" = "可兑换";
 "wish.status.completed" = "已完成";
+
+// MARK: - 详细记录
+"detail.record_behavior" = "记录行为";
+"detail.total_points" = "总积分";
+"detail.energy" = "精力值";
+"detail.grade_label" = "效率等级";
+"detail.behavior_label" = "具体行为";
+"detail.behavior_placeholder" = "选择行为...";
+"detail.time_duration" = "时间与时长";
+"detail.mood" = "心情评分";
+"detail.notes" = "备注";
+"detail.notes_placeholder" = "完成了什么？";
+"detail.record_button" = "记录行为";

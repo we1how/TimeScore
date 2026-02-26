@@ -42,7 +42,8 @@ struct InsightsView: View {
             }
             .padding(.horizontal)
         }
-        .background(Color.white.ignoresSafeArea())
+        // Bug Fix 3: 使用系统背景色支持暗黑模式
+        .background(Color(.systemBackground).ignoresSafeArea())
         .onAppear {
             loadUser()
         }
@@ -159,7 +160,14 @@ struct InsightsView: View {
                 }
             }
 
-            if vizVM.timelineItems.isEmpty {
+            // Bug Fix 4: 只显示今日行为记录，避免与"查看全部"重复
+            if let todayItem = vizVM.timelineItems.first(where: { $0.isToday }) {
+                VStack(spacing: 8) {
+                    ForEach(Array(todayItem.behaviors.enumerated()), id: \.offset) { index, behavior in
+                        behaviorRow(behavior, isLast: index == todayItem.behaviors.count - 1)
+                    }
+                }
+            } else {
                 // 空状态提示
                 HStack {
                     Spacer()
@@ -173,12 +181,6 @@ struct InsightsView: View {
                     }
                     .padding(.vertical, 32)
                     Spacer()
-                }
-            } else {
-                VStack(spacing: 12) {
-                    ForEach(Array(vizVM.timelineItems.prefix(5).enumerated()), id: \.offset) { index, item in
-                        timelineDaySection(item)
-                    }
                 }
             }
         }
@@ -201,6 +203,7 @@ struct InsightsView: View {
         }
     }
 
+    // Bug Fix 4: 添加心情和备注显示
     private func behaviorRow(_ behavior: Behavior, isLast: Bool) -> some View {
         HStack(alignment: .top, spacing: 12) {
             // 时间线
@@ -236,6 +239,26 @@ struct InsightsView: View {
                 Text("\(behavior.timestamp.formattedTime()) • \(behavior.duration) \(NSLocalizedString("insights.minutes", comment: "Minutes"))")
                     .font(.system(size: 13))
                     .foregroundColor(.gray)
+
+                // 心情显示
+                if behavior.mood > 0 {
+                    HStack(spacing: 2) {
+                        ForEach(1...5, id: \.self) { star in
+                            Image(systemName: star <= behavior.mood ? "star.fill" : "star")
+                                .font(.system(size: 8))
+                                .foregroundColor(star <= behavior.mood ? .primaryGreen : .gray.opacity(0.3))
+                        }
+                    }
+                }
+
+                // 备注显示
+                if let notes = behavior.notes, !notes.isEmpty {
+                    Text(notes)
+                        .font(.system(size: 12))
+                        .foregroundColor(.secondary)
+                        .lineLimit(2)
+                        .padding(.top, 2)
+                }
 
                 if behavior.score > 0 {
                     Text("+\(String(format: "%.0f", behavior.score)) pts")

@@ -35,8 +35,8 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            // 背景
-            Color.white
+            // Bug Fix 3: 使用系统背景色支持暗黑模式
+            Color(.systemBackground)
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
@@ -93,6 +93,10 @@ struct HomeView: View {
         .onAppear {
             loadUser()
             loadStreak()
+            // Bug Fix 1: 加载自定义行为以确保显示最新数据
+            if let user = user {
+                behaviorVM.loadCustomBehaviors(for: user)
+            }
             // 如果之前有正在进行的计时，恢复它
             if isRunning && elapsedTime > 0 {
                 startTimer()
@@ -179,7 +183,7 @@ struct HomeView: View {
             }) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 22, weight: .medium))
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .frame(width: 44, height: 44)
                     .background(Color.gray.opacity(0.1))
                     .clipShape(Circle())
@@ -204,7 +208,7 @@ struct HomeView: View {
             Text("\(String(format: "%.0f", user?.totalPoints ?? 0))")
                 .font(.system(size: 72, weight: .thin, design: .rounded))
                 .tracking(-2)
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
 
             // 能量指示器
             HStack(spacing: 8) {
@@ -609,7 +613,14 @@ struct HomeView: View {
 
         user = CoreDataManager.shared.fetchOrCreateUser()
         if let user = user {
-            energyVM.updateEnergy(user.currentEnergy)
+            // Bug Fix 7: 检查并执行每日精力重置
+            let wasReset = CoreDataManager.shared.checkAndResetDailyEnergy(for: user)
+            if wasReset {
+                // 如果重置了，更新 ViewModel
+                energyVM.updateEnergy(EnergyViewModel.defaultEnergy)
+            } else {
+                energyVM.updateEnergy(user.currentEnergy)
+            }
         }
     }
 

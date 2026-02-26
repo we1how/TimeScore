@@ -113,3 +113,16 @@
 "wish.status.pending" = "In Progress";
 "wish.status.redeemable" = "Ready";
 "wish.status.completed" = "Completed";
+
+// MARK: - Detail Record View
+"detail.record_behavior" = "Record Behavior";
+"detail.total_points" = "Total Points";
+"detail.energy" = "Energy";
+"detail.grade_label" = "Efficiency Grade";
+"detail.behavior_label" = "Specific Behavior";
+"detail.behavior_placeholder" = "Select behavior...";
+"detail.time_duration" = "Time & Duration";
+"detail.mood" = "Mood";
+"detail.notes" = "Notes";
+"detail.notes_placeholder" = "What did you accomplish?";
+"detail.record_button" = "Record Behavior";

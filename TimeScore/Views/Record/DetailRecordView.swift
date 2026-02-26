@@ -23,8 +23,8 @@ struct DetailRecordView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                // 背景
-                Color.bgLight
+                // Bug Fix 3: 使用系统背景色支持暗黑模式
+                Color(.systemGroupedBackground)
                     .ignoresSafeArea()
 
                 ScrollView(showsIndicators: false) {
@@ -34,7 +34,7 @@ struct DetailRecordView: View {
 
                         // 标题
                         HStack {
-                            Text("Record Behavior")
+                            Text(NSLocalizedString("detail.record_behavior", comment: "Record Behavior"))
                                 .font(.system(size: 20, weight: .bold))
                             Spacer()
                         }
@@ -58,7 +58,7 @@ struct DetailRecordView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark")
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                     }
                 }
             }
@@ -91,7 +91,7 @@ struct DetailRecordView: View {
         HStack(spacing: 16) {
             // 积分卡片
             VStack(alignment: .leading, spacing: 8) {
-                Text("Total Points")
+                Text(NSLocalizedString("detail.total_points", comment: "Total Points"))
                     .font(.system(size: 11, weight: .semibold))
                     .tracking(1)
                     .foregroundColor(.secondaryText)
@@ -99,7 +99,7 @@ struct DetailRecordView: View {
 
                 Text("\(Int(user?.totalPoints ?? 0))")
                     .font(.system(size: 36, weight: .bold, design: .rounded))
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -123,7 +123,7 @@ struct DetailRecordView: View {
                 VStack(spacing: 2) {
                     Text("\(Int(user?.currentEnergy ?? 100))%")
                         .font(.system(size: 14, weight: .bold))
-                    Text("Energy")
+                    Text(NSLocalizedString("detail.energy", comment: "Energy"))
                         .font(.system(size: 8))
                         .foregroundColor(.secondaryText)
                 }
@@ -137,16 +137,16 @@ struct DetailRecordView: View {
     private var formCard: some View {
         VStack(spacing: 24) {
             // 效率等级选择
-            formSection(title: "Efficiency Grade") {
+            formSection(title: NSLocalizedString("detail.grade_label", comment: "Efficiency Grade")) {
                 gradeSelector
             }
 
             // 具体行为
-            formSection(title: "Specific Behavior") {
+            formSection(title: NSLocalizedString("detail.behavior_label", comment: "Specific Behavior")) {
                 Button(action: { showBehaviorPicker = true }) {
                     HStack {
-                        Text(behaviorVM.behaviorName.isEmpty ? "Select behavior..." : behaviorVM.behaviorName)
-                            .foregroundColor(behaviorVM.behaviorName.isEmpty ? .gray.opacity(0.5) : .black)
+                        Text(behaviorVM.behaviorName.isEmpty ? NSLocalizedString("detail.behavior_placeholder", comment: "Select behavior") : behaviorVM.behaviorName)
+                            .foregroundColor(behaviorVM.behaviorName.isEmpty ? .gray.opacity(0.5) : .primary)
                         Spacer()
                         Image(systemName: "chevron.down")
                             .font(.system(size: 12))
@@ -163,7 +163,7 @@ struct DetailRecordView: View {
             }
 
             // 时间和时长
-            formSection(title: "Time & Duration") {
+            formSection(title: NSLocalizedString("detail.time_duration", comment: "Time & Duration")) {
                 HStack(spacing: 12) {
                     // 时长步进器
                     HStack(spacing: 0) {
@@ -183,9 +183,22 @@ struct DetailRecordView: View {
 
                         Spacer()
 
+                        // Bug Fix 5: 直接输入分钟数
                         HStack(alignment: .lastTextBaseline, spacing: 4) {
-                            Text("\(behaviorVM.duration)")
+                            TextField("30", value: $behaviorVM.duration, format: .number)
                                 .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.primary)
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.trailing)
+                                .frame(width: 50)
+                                .onChange(of: behaviorVM.duration) { newValue in
+                                    // 限制范围在 5-480 分钟
+                                    if newValue < 5 {
+                                        behaviorVM.duration = 5
+                                    } else if newValue > 480 {
+                                        behaviorVM.duration = 480
+                                    }
+                                }
                             Text("min")
                                 .font(.system(size: 10, weight: .medium))
                                 .foregroundColor(.secondaryText)
@@ -220,7 +233,7 @@ struct DetailRecordView: View {
             }
 
             // 心情评分
-            formSection(title: "Mood") {
+            formSection(title: NSLocalizedString("detail.mood", comment: "Mood")) {
                 HStack(spacing: 20) {
                     ForEach(1...5, id: \.self) { star in
                         Button(action: { behaviorVM.mood = star }) {
@@ -241,10 +254,10 @@ struct DetailRecordView: View {
             }
 
             // 备注
-            formSection(title: "Notes") {
+            formSection(title: NSLocalizedString("detail.notes", comment: "Notes")) {
                 ZStack(alignment: .topLeading) {
                     if behaviorVM.notes.isEmpty {
-                        Text("What did you accomplish?")
+                        Text(NSLocalizedString("detail.notes_placeholder", comment: "What did you accomplish?"))
                             .foregroundColor(.gray.opacity(0.5))
                             .padding(.horizontal, 16)
                             .padding(.vertical, 12)
@@ -289,7 +302,7 @@ struct DetailRecordView: View {
                 }) {
                     Text(grade)
                         .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(isSelected ? .black : .secondaryText)
+                        .foregroundColor(isSelected ? .primary : .secondaryText)
                         .frame(maxWidth: .infinity)
                         .frame(height: 40)
                         .background(isSelected ? Color.primaryGreen : Color.clear)
@@ -339,7 +352,7 @@ struct DetailRecordView: View {
                         behaviorVM.recordBehavior(for: user)
                     }
                 }) {
-                    Text("Record Behavior")
+                    Text(NSLocalizedString("detail.record_button", comment: "Record Behavior"))
                         .font(.system(size: 17, weight: .bold))
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
