@@ -309,7 +309,7 @@ struct HomeView: View {
 
                 Text(behavior.name)
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.black.opacity(0.8))
+                    .foregroundColor(.primary)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
@@ -412,7 +412,7 @@ struct HomeView: View {
             // 秒表显示
             Text(formattedTime)
                 .font(.system(size: 56, weight: .light, design: .monospaced))
-                .foregroundColor(isRunning ? .vibrantGreen : .black)
+                .foregroundColor(isRunning ? .vibrantGreen : .primary)
                 .tracking(2)
 
             // 播放/暂停按钮
@@ -588,7 +588,7 @@ struct HomeView: View {
                 Text(behavior.name)
                     .font(.system(size: 14, weight: isSelected ? .semibold : .medium))
             }
-            .foregroundColor(isSelected ? .white : .black.opacity(0.7))
+            .foregroundColor(isSelected ? .white : .primary)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .background(

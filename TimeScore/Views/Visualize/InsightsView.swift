@@ -81,7 +81,7 @@ struct InsightsView: View {
             statCard(
                 title: NSLocalizedString("insights.total_points", comment: "Total points"),
                 value: stats?.totalPoints.pointsDisplay ?? "0",
-                color: .black
+                color: .primary
             )
 
             statCard(
@@ -94,13 +94,13 @@ struct InsightsView: View {
                 title: NSLocalizedString("insights.streak", comment: "Streak"),
                 value: "\(stats?.streak ?? 0)",
                 icon: "🔥",
-                color: .black
+                color: .primary
             )
 
             statCard(
                 title: NSLocalizedString("insights.avg_mood", comment: "Avg mood"),
                 value: stats?.averageMoodText ?? "0.0",
-                color: .black
+                color: .primary
             )
         }
     }

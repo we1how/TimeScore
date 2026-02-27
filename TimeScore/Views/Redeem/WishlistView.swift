@@ -43,7 +43,7 @@ struct WishlistView: View {
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
-        .background(Color.bgLight.ignoresSafeArea())
+        .background(Color(.systemBackground).ignoresSafeArea())
         .alert(NSLocalizedString("common.error", comment: "Error"), isPresented: $exchangeVM.showError) {
             Button(NSLocalizedString("common.ok", comment: "OK")) {}
         } message: {
@@ -88,7 +88,7 @@ struct WishlistView: View {
             HStack(alignment: .lastTextBaseline, spacing: 8) {
                 Text(exchangeVM.currentPoints.pointsDisplay)
                     .font(.system(size: 48, weight: .black, design: .rounded))
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
 
                 Text(NSLocalizedString("wishlist.points", comment: "Points"))
                     .font(.system(size: 12, weight: .bold))
@@ -110,14 +110,14 @@ struct WishlistView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(NSLocalizedString("wishlist.name_label", comment: "Wish name label"))
                         .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.black.opacity(0.7))
+                        .foregroundColor(.primary)
 
                     TextField(NSLocalizedString("wishlist.name_placeholder", comment: "Wish name placeholder"), text: $exchangeVM.newWishName)
                         .font(.system(size: 16))
                         .padding(.horizontal, 12)
                         .padding(.vertical, 10)
                         .frame(height: 44)
-                        .background(Color.white)
+                        .background(Color(.systemBackground))
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
@@ -132,7 +132,7 @@ struct WishlistView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text(NSLocalizedString("wishlist.cost_label", comment: "Point cost label"))
                             .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.black.opacity(0.7))
+                            .foregroundColor(.primary)
 
                         TextField("1000", text: $exchangeVM.newWishCost)
                             .keyboardType(.numberPad)
@@ -140,7 +140,7 @@ struct WishlistView: View {
                             .padding(.horizontal, 12)
                             .padding(.vertical, 10)
                             .frame(height: 44)
-                            .background(Color.white)
+                            .background(Color(.systemBackground))
                             .cornerRadius(12)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
@@ -168,7 +168,7 @@ struct WishlistView: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white)
+                .fill(Color(.secondarySystemBackground))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -277,7 +277,7 @@ struct WishlistView: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white)
+                .fill(Color(.secondarySystemBackground))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16)

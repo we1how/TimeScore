@@ -105,7 +105,7 @@ struct DetailRecordView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.white.opacity(0.5))
+                    .fill(Color(.secondarySystemBackground))
             )
 
             // 能量环形图
@@ -153,7 +153,7 @@ struct DetailRecordView: View {
                             .foregroundColor(.secondaryText)
                     }
                     .padding()
-                    .background(Color.white)
+                    .background(Color(.systemBackground))
                     .cornerRadius(12)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
@@ -206,7 +206,7 @@ struct DetailRecordView: View {
                     }
                     .padding(.horizontal, 8)
                     .padding(.vertical, 6)
-                    .background(Color.white)
+                    .background(Color(.systemBackground))
                     .cornerRadius(20)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
@@ -223,7 +223,7 @@ struct DetailRecordView: View {
                     .labelsHidden()
                     .datePickerStyle(.compact)
                     .frame(height: 44)
-                    .background(Color.white)
+                    .background(Color(.systemBackground))
                     .cornerRadius(20)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
@@ -245,7 +245,7 @@ struct DetailRecordView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 8)
-                .background(Color.white)
+                .background(Color(.systemBackground))
                 .cornerRadius(20)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
@@ -268,7 +268,7 @@ struct DetailRecordView: View {
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
                 }
-                .background(Color.white)
+                .background(Color(.systemBackground))
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
@@ -279,7 +279,7 @@ struct DetailRecordView: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color.cardBackground)
+                .fill(Color(.secondarySystemBackground))
         )
         .padding(.horizontal)
     }
@@ -311,7 +311,7 @@ struct DetailRecordView: View {
             }
         }
         .padding(4)
-        .background(Color.white)
+        .background(Color(.systemBackground))
         .clipShape(Capsule())
         .overlay(
             Capsule()
