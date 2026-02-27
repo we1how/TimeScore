@@ -194,6 +194,24 @@ class BehaviorViewModel: ObservableObject {
         behaviorName = name
     }
 
+    /// 验证当前选择的行为是否适用于当前等级
+    /// 如果不适用，清除行为名称
+    func validateBehaviorForCurrentGrade() {
+        // 如果行为名称为空，无需验证
+        guard !behaviorName.isEmpty else { return }
+
+        // 获取当前等级的推荐行为列表
+        let recommended = recommendedBehaviors()
+
+        // 检查当前选择的行为是否在新等级的推荐列表中
+        let isValid = recommended.contains { $0.name == behaviorName }
+
+        // 如果不匹配，清除行为名称
+        if !isValid {
+            behaviorName = ""
+        }
+    }
+
     /// 获取推荐的行为列表（预设 + 自定义）
     /// R等级特殊处理：返回R1+R2+R3的所有行为
     func recommendedBehaviors() -> [(name: String, desc: String)] {
@@ -256,7 +274,7 @@ class BehaviorViewModel: ObservableObject {
         duration = 30
         mood = 3
         notes = ""
-        recordTime = Date()
+        recordTime = Date() // Bug Fix: 确保重置为当前时间，避免使用过期的初始化时间
         updateScorePreview()
     }
 }

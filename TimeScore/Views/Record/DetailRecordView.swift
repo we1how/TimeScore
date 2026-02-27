@@ -52,6 +52,11 @@ struct DetailRecordView: View {
                 // 底部固定按钮
                 bottomButton
             }
+            // Bug Fix: 点击空白处收起键盘
+            .contentShape(Rectangle())
+            .onTapGesture {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }
             .navigationTitle("TimeScore")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -83,6 +88,8 @@ struct DetailRecordView: View {
         .onAppear {
             loadUser()
         }
+        // Bug Fix: 为数字键盘添加 Done 按钮
+        .withNumberPadDoneButton()
     }
 
     // MARK: - Stats Section
@@ -298,6 +305,8 @@ struct DetailRecordView: View {
                         } else {
                             behaviorVM.grade = grade
                         }
+                        // Bug Fix: 验证并清除不匹配当前等级的行为
+                        behaviorVM.validateBehaviorForCurrentGrade()
                     }
                 }) {
                     Text(grade)

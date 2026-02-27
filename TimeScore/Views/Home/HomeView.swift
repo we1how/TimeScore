@@ -524,6 +524,9 @@ struct HomeView: View {
         let minutes = Int(elapsedTime / 60)
         behaviorVM.duration = max(1, minutes) // 至少 1 分钟
 
+        // Bug Fix: 更新记录时间为当前时间，避免使用 ViewModel 初始化时的旧时间
+        behaviorVM.recordTime = Date()
+
         // 保存记录
         if let user = user {
             behaviorVM.recordBehavior(for: user)

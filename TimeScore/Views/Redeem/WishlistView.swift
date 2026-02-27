@@ -40,10 +40,14 @@ struct WishlistView: View {
             }
             .padding(.horizontal)
         }
+        // Bug Fix: 点击空白处收起键盘 - 使用 contentShape 确保整个区域可点击
+        .contentShape(Rectangle())
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
         .background(Color(.systemBackground).ignoresSafeArea())
+        // Bug Fix: 为数字键盘添加 Done 按钮
+        .withNumberPadDoneButton()
         .alert(NSLocalizedString("common.error", comment: "Error"), isPresented: $exchangeVM.showError) {
             Button(NSLocalizedString("common.ok", comment: "OK")) {}
         } message: {

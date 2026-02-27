@@ -182,3 +182,50 @@ struct LayoutConstants {
     static let iconSize: CGFloat = 24
     static let spacing: CGFloat = 16
 }
+
+// MARK: - Keyboard Dismissal
+
+extension View {
+    /// 点击空白处收起键盘
+    /// 适用于包含 TextField/TextEditor 的表单界面
+    func dismissKeyboardOnTap() -> some View {
+        self.onTapGesture {
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder),
+                to: nil,
+                from: nil,
+                for: nil
+            )
+        }
+    }
+
+    /// 使用 contentShape 确保整个区域可点击并收起键盘
+    func dismissKeyboardOnTapAnywhere() -> some View {
+        self.contentShape(Rectangle())
+            .onTapGesture {
+                UIApplication.shared.sendAction(
+                    #selector(UIResponder.resignFirstResponder),
+                    to: nil,
+                    from: nil,
+                    for: nil
+                )
+            }
+    }
+
+    /// 为数字键盘添加 Done 按钮
+    func withNumberPadDoneButton() -> some View {
+        self.toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button(NSLocalizedString("common.done", comment: "Done")) {
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder),
+                        to: nil,
+                        from: nil,
+                        for: nil
+                    )
+                }
+            }
+        }
+    }
+}
